@@ -3,7 +3,7 @@ import { Home, ListCheck, User } from "lucide-react";
 export default function Sidebar({ isOpen }) {
   return (
     <div
-      className={`bg-gray-100 dark:bg-neutral-900 text-white h-screen w-64 fixed
+      className={`bg-gray-100 dark:bg-neutral-900 text-white h-screen w-80 p-2.5 fixed
         transition-discrete duration-500 
         ${isOpen ? "translate-x-0" : "-translate-x-full"}`}
     >
