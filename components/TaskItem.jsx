@@ -1,9 +1,26 @@
-'use client';
+"use client";
 
 import React from "react";
-import { Trash, Pencil} from "lucide-react";
+import { Trash, Pencil, Check } from "lucide-react";
 
-const TaskItem = ({ title, dueDate, priority, onEdit, onDelete }) => {
+const TaskItem = ({
+  title,
+  dueDate,
+  priority,
+  isEditing,
+  editTitle,
+  setEditTitle,
+  onEdit,
+  onSave,
+  onDelete,
+}) => {
+
+    const handleKeyDown = (e) => {
+      if (e.key === "Enter") {
+        onSave(); // Save when Enter is pressed
+      }
+    };
+
   return (
     <div className="transition-discrete duration-500 flex justify-center items-center p-4 border rounded-4xl relative w-2xl bg-white dark:bg-neutral-800">
       <div
@@ -15,9 +32,20 @@ const TaskItem = ({ title, dueDate, priority, onEdit, onDelete }) => {
       ></div>
 
       <div className="flex-1">
-        <h3 className="text-lg font-bold text-black dark:text-white">
-          {title}
-        </h3>
+        {isEditing ? (
+          <input
+            className="text-lg font-bold bg-transparent border-b-2 border-blue-500 focus:outline-none text-black dark:text-white"
+            value={editTitle}
+            onChange={(e) => setEditTitle(e.target.value)}
+            onKeyDown={handleKeyDown} // Listen for Enter key
+            autoFocus // Automatically focus input when editing
+          />
+        ) : (
+          <h3 className="text-lg font-bold text-black dark:text-white">
+            {title}
+          </h3>
+        )}
+
         {dueDate && (
           <p className="text-sm text-gray-800 dark:text-gray-500">
             Due Date: {dueDate}
@@ -25,16 +53,25 @@ const TaskItem = ({ title, dueDate, priority, onEdit, onDelete }) => {
         )}
       </div>
 
-      <button
-        onClick={onEdit}
-        className="absolute top-11 right-4 bg-transparent border-none text-blue-500 hover:text-blue-700 dark:text-blue-600 dark:hover:text-blue-800 text-sm"
-      >
-        <Pencil />
-      </button>
+      {isEditing ? (
+        <button
+          onClick={onSave}
+          className="absolute top-11 right-4 text-green-500 hover:text-green-700 dark:text-green-600 dark:hover:text-green-800 text-sm"
+        >
+          <Check />
+        </button>
+      ) : (
+        <button
+          onClick={onEdit}
+          className="absolute top-11 right-4 text-blue-500 hover:text-blue-700 dark:text-blue-600 dark:hover:text-blue-800 text-sm"
+        >
+          <Pencil />
+        </button>
+      )}
 
       <button
         onClick={onDelete}
-        className="absolute top-2 right-4 bg-transparent border-none text-red-500 hover:text-red-700 dark:text-red-600 dark:hover:text-red-800 text-sm "
+        className="absolute top-2 right-4 text-red-500 hover:text-red-700 dark:text-red-600 dark:hover:text-red-800 text-sm"
       >
         <Trash />
       </button>
