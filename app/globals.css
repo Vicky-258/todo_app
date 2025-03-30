@@ -11,24 +11,38 @@
   --font-cool: 'Poppins', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 
   /* Primary */
-  --color-primary: oklch(0.62 0.188 259.81);
-  --color-primaryDark: oklch(0.71 0.1434 254.62);
-  /*Secondary */
-  --color-secondary: oklch(0.7 0.1491 162.48);
-  --color-secondaryDark: oklch(0.72 0.192 149.58);
+  --color-primary: oklch(0.6 0.2177 257.42);
+  --color-primaryDark: oklch(0.62 0.205577 255.4861);
+  /*accent */
+  --color-accent: oklch(0.73 0.1944 147.44);
+  --color-accentDark: oklch(0.76 0.2082 146.98);
   /*Background */
-  --color-bground: oklch(0.98 0.0017 247.84);
-  --color-bgroundDark: oklch(0.13 0.01 250);
+  --color-bground: oklch(0.97 0 0);
+  --color-bgroundDark: oklch(0.24 0 0);
   /*Card */
   --color-card: oklch(1 0 0);
-  --color-cardDark: oklch(0.28 0.0296 256.85);
+  --color-cardDark: oklch(0.29 0.0036 286.18);
   /* Text */
-  --color-TextC: oklch(0.21 0.0318 264.66);
-  --color-TextCDark: oklch(0.93 0.0058 264.53);
+  --color-TextC: oklch(0.32 0 0);
+  --color-TextCDark: oklch(0.94 0 0);
   /* Border */
-  --color-borderC: oklch(0.87 0.0093 258.34);
-  --color-borderCDark: oklch(0.37 0.0306 259.73);
+  --color-borderC: oklch(0.86 0.0068 286.26);
+  --color-borderCDark: oklch(0.35 0.0034 286.22);
 
+  --color-redC: oklch(0.65 0.2321 28.66);
+  --color-redCDark: oklch(0.66 0.2236 28.29);
+
+  --color-CardShadows: oklch(0 0 0 / 10%);
+  --color-CardShadowsDark: oklch(0 0 0 / 60%);
+
+  --color-ButtonShadow: oklch(0 0 0 / 15%);
+  --color-ButtonShadowDark: oklch(1 0 0 / 10%);
+
+  --color-NavbarShadow: oklch(0 0 0 / 8%);
+  --color-NavbarShadowDark: oklch(1 0 0 / 5%);
+
+  --color-FloatingShadow: oklch(0 0 0 / 20%);
+  --color-FloatingShadowDark: oklch(0 0 0 / 80%);
 }
 
 

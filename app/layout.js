@@ -22,7 +22,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
-        className="antialiased font-inter"
+        className="antialiased"
       >
 
         {children}
