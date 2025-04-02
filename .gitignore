@@ -51,3 +51,16 @@ backend/.coverage
 ### COMMON ###
 .DS_Store                # macOS system file
 *.pem                    # Private keys (avoid committing)
+
+# Ignore PyCharm files
+/.idea/
+/shelf/
+/workspace.xml
+
+# Editor-based HTTP Client requests
+/httpRequests/
+
+# Datasource local storage ignored files
+/dataSources/
+dataSources.local.xml
+
