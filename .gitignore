@@ -1,41 +1,53 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# dependencies
-/node_modules
-/.pnp
-.pnp.*
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/versions
+### FRONTEND ###
+frontend/node_modules/
+frontend/.pnp
+frontend.pnp.*
+frontend/.yarn/*
+!frontend/.yarn/patches
+!frontend/.yarn/plugins
+!frontend/.yarn/releases
+!frontend/.yarn/versions
 
-# testing
-/coverage
+# Next.js
+frontend/.next/
+frontend/out/
 
-# next.js
-/.next/
-/out/
+# Production build
+frontend/build
 
-# production
-/build
+# Testing
+frontend/coverage
 
-# misc
-.DS_Store
-*.pem
+# Debug logs
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+frontend/.pnpm-debug.log*
 
-# debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-.pnpm-debug.log*
+# TypeScript
+frontend/*.tsbuildinfo
+frontend/next-env.d.ts
 
-# env files (can opt-in for committing if needed)
-.env*
+# Vercel
+frontend/.vercel
 
-# vercel
-.vercel
 
-# typescript
-*.tsbuildinfo
-next-env.d.ts
+### BACKEND ###
+backend/venv/            # Virtual environment (Python)
+backend/__pycache__/     # Python bytecode cache
+backend/db.sqlite3       # SQLite database (if using SQLite)
+backend/.env*            # Environment variables
+backend/migrations/      # Django migrations (optional, can be committed)
+backend/staticfiles/     # Collected static files (Django)
+backend/media/           # Uploaded media files (optional)
+
+# Debug logs
+backend/*.log
+backend/.pytest_cache/
+backend/.coverage
+
+### COMMON ###
+.DS_Store                # macOS system file
+*.pem                    # Private keys (avoid committing)
