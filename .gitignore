@@ -33,29 +33,11 @@ frontend/next-env.d.ts
 # Vercel
 frontend/.vercel
 
-# BACKEND (Django)
-backend/.venv/  
-backend/__pycache__/ 
-backend/media/  
-backend/staticfiles/  
-backend/.pytest_cache/ 
-
-# Logs & Debug
-backend/*.log
-backend/debug.log
-backend/.coverage 
-
-# Django Migrations (optional)
-**/migrations/*.py
-!**/migrations/__init__.py  
-
-# IDE & Editor
-frontend/vscode/
-backend/idea/
-*.iml
-
-# System files
-.DS_Store
-Thumbs.db
-
-backend/.idea
+# Backend-specific ignores
+backend/__pycache__/
+backend/**/*.pyc
+backend/**/*.pyo
+backend/db.sqlite3
+backend/.env
+backend/venv/
+backend/**/migrations/
