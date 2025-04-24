@@ -14,8 +14,8 @@
   --color-primary: oklch(0.6 0.2177 257.42);
   --color-primaryDark: oklch(0.62 0.205577 255.4861);
   /*accent */
-  --color-accent: oklch(0.73 0.1944 147.44);
-  --color-accentDark: oklch(0.76 0.2082 146.98);
+  --color-accent: oklch(0.78 0.19 210);
+  --color-accentDark: oklch(0.70 0.21 212);
   /*Background */
   --color-bground: oklch(0.97 0 0);
   --color-bgroundDark: oklch(0.24 0 0);

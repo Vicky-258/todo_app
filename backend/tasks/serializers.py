@@ -13,7 +13,7 @@ class TaskSerializer(serializers.ModelSerializer):
         title = data.get("title")
         due_date = data.get("due_date")
 
-        existing_task = Task.objects.filter(title=title, user=user, is_completed=False).exclude(due_date__lt=now())
+        existing_task = Task.objects.filter(title=title, user=user, is_completed=False, due_date=due_date).exclude(due_date__lt=now())
 
         if existing_task.exists():
             raise serializers.ValidationError("A task with this title is already active. Complete it before adding a new one.")

@@ -7,7 +7,7 @@ import ProfilePic from "@/public/ProfilePic.jpg";
 
 export default function SideBar({ isOpen, setIsOpen }) {
   const sidebarRef = useRef(null);
-  const { isDarkMode, toggleDarkMode } = useDarkMode();
+  const { isDarkMode, toggleDarkMode, ready } = useDarkMode();
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -23,6 +23,8 @@ export default function SideBar({ isOpen, setIsOpen }) {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isOpen]);
+
+ // avoid flicker 🔦
 
   return (
     <div
@@ -44,7 +46,10 @@ export default function SideBar({ isOpen, setIsOpen }) {
           {isDarkMode ? <Sun size={26} /> : <Moon size={26} />}
         </button>
         <div className="md:invisible md:pointer-">
-          <ProfileIcon className="visible md:invisible md:pointer-events-none" src={ProfilePic}/>
+          <ProfileIcon
+            className="visible md:invisible md:pointer-events-none"
+            src={ProfilePic}
+          />
         </div>
       </div>
     </div>

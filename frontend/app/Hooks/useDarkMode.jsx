@@ -1,19 +1,33 @@
 import { useEffect, useState } from "react";
 
 export function useDarkMode() {
-  const [isDarkMode, setIsDarkMode] = useState(false); 
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
+    // 🚨 Guard for SSR
+    if (typeof window === "undefined") return;
 
-    const storedTheme = localStorage.getItem("theme");
-    if (storedTheme) {
-      setIsDarkMode(storedTheme === "dark");
-    } else {
-      setIsDarkMode(window.matchMedia("(prefers-color-scheme: dark)").matches);
+    try {
+      const storedTheme = localStorage.getItem("theme");
+      if (storedTheme) {
+        setIsDarkMode(storedTheme === "dark");
+      } else {
+        const prefersDark = window.matchMedia(
+          "(prefers-color-scheme: dark)"
+        ).matches;
+        setIsDarkMode(prefersDark);
+      }
+    } catch (err) {
+      console.warn("Dark mode error:", err);
     }
+
+    setReady(true);
   }, []);
 
   useEffect(() => {
+    if (typeof window === "undefined") return;
+
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
     const handleChange = (e) => {
       if (!localStorage.getItem("theme")) {
@@ -26,16 +40,24 @@ export function useDarkMode() {
   }, []);
 
   useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const root = document.documentElement;
     if (isDarkMode) {
-      document.documentElement.classList.add("dark");
+      root.classList.add("dark");
       localStorage.setItem("theme", "dark");
     } else {
-      document.documentElement.classList.remove("dark");
+      root.classList.remove("dark");
       localStorage.setItem("theme", "light");
     }
   }, [isDarkMode]);
 
   const toggleDarkMode = () => setIsDarkMode((prev) => !prev);
 
-  return { isDarkMode, toggleDarkMode };
+  return {
+    isDarkMode,
+    toggleDarkMode,
+    setDarkMode: setIsDarkMode,
+    ready,
+  };
 }
