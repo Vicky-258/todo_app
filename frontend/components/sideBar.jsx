@@ -1,6 +1,6 @@
 import clsx from "clsx";
-import { Moon, Sun} from "lucide-react";
-import { useDarkMode } from "@/app/Hooks/useDarkMode";
+import { Moon, Sun } from "lucide-react";
+import { useDarkMode } from "@/lib/Hooks/useDarkMode";
 import { useRef, useEffect } from "react";
 import ProfileIcon from "./ProfileIcon";
 import ProfilePic from "@/public/ProfilePic.jpg";
@@ -24,7 +24,7 @@ export default function SideBar({ isOpen, setIsOpen }) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isOpen]);
 
- // avoid flicker 🔦
+  // avoid flicker 🔦
 
   return (
     <div
@@ -47,7 +47,7 @@ export default function SideBar({ isOpen, setIsOpen }) {
         </button>
         <div className="md:invisible md:pointer-">
           <ProfileIcon
-            className="visible md:invisible md:pointer-events-none"
+            className="visible md:invisible md:pointer-events-none w-10 h-10 sm:w-12 sm:h-12"
             src={ProfilePic}
           />
         </div>

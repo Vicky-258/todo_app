@@ -1,5 +1,7 @@
 import { Trash, Pencil } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const TaskItem = ({ TaskId, title, dueDate, priority, deleteTask, updateTask }) => {
   const priorityColors = {
@@ -10,7 +12,7 @@ const TaskItem = ({ TaskId, title, dueDate, priority, deleteTask, updateTask }) 
   const taskItemRef = useRef(null);
   const [isEditing, setIsEditing] = useState(false);
   const [editedTitle, setEditedTitle] = useState(title);
-  const [editedDueDate, setEditedDueDate] = useState(dueDate || "");
+  const [editedDueDate, setEditedDueDate] = useState(dueDate ? new Date(dueDate) : null);
   const [editedPriority, setEditedPriority] = useState(priority || "low");
 
   useEffect(() => {
@@ -86,12 +88,16 @@ const TaskItem = ({ TaskId, title, dueDate, priority, deleteTask, updateTask }) 
         )}
 
         {isEditing ? (
-          <input
-            type="date"
+          <DatePicker
+            selected={new Date(editedDueDate)}
+            onChange={(date) => setEditedDueDate(date)}
+            dateFormat="yyyy-MM-dd"
+            showMonthDropdown
+            showYearDropdown
+            yearItemNumber={5} // Limit the number of years shown in the dropdown
             className="font-cool text-sm sm:text-base text-TextC dark:text-TextCDark bg-transparent border-b-2 border-primary outline-none"
-            value={editedDueDate}
-            onChange={(e) => setEditedDueDate(e.target.value)}
-          />
+            dropdownMode="select" // Make the dropdowns work via select mode
+            showIcon={true}        />
         ) : (
           <p className="font-cool text-sm sm:text-base text-TextC dark:text-TextCDark">
             {dueDate ? `Due: ${dueDate}` : "Due date not defined"}

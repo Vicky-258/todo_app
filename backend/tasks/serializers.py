@@ -4,7 +4,7 @@ from .models import Task
 
 class TaskSerializer(serializers.ModelSerializer):
     remaining_days = serializers.SerializerMethodField()
-
+    due_date = serializers.DateTimeField(format="%Y-%m-%d", required=False, allow_null=True)
     class Meta:
         model = Task
         fields = '__all__'

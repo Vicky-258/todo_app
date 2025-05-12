@@ -24,5 +24,5 @@ class Task(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, db_index=True)  # Link task to a user
 
     def __str__(self):
-        return self.title  # Show task title in Django admin
+        return self.title  # Show the task title in Django admin
 

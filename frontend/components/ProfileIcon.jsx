@@ -1,10 +1,12 @@
+"use client";
+
 import { User } from "lucide-react";
 import Image from "next/image";
 
-export default function ProfileIcon({ src, onClick, className = "" }) {
+export default function ProfileIcon({ src, className = "" }) {
   return (
     <div
-      className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-gray-300 dark:border-gray-600
+      className={`rounded-full border-2 border-gray-300 dark:border-gray-600
                   flex items-center justify-center overflow-hidden cursor-pointer transition-opacity duration-300
                   ${className}`}
     >

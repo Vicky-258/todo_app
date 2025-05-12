@@ -1,11 +1,15 @@
-import { useEffect, useState } from "react";
+"use client";
+import { createContext, useContext, useEffect, useState } from "react";
 
-export function useDarkMode() {
+// 1. Create the context
+const ThemeContext = createContext();
+
+export function ThemeProvider({ children }) {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [ready, setReady] = useState(false);
 
+  // 2. On mount, check saved theme or system preference
   useEffect(() => {
-    // 🚨 Guard for SSR
     if (typeof window === "undefined") return;
 
     try {
@@ -25,6 +29,7 @@ export function useDarkMode() {
     setReady(true);
   }, []);
 
+  // 3. Listen to system theme changes
   useEffect(() => {
     if (typeof window === "undefined") return;
 
@@ -39,6 +44,7 @@ export function useDarkMode() {
     return () => mediaQuery.removeEventListener("change", handleChange);
   }, []);
 
+  // 4. Apply theme to root and save to localStorage
   useEffect(() => {
     if (typeof window === "undefined") return;
 
@@ -54,10 +60,21 @@ export function useDarkMode() {
 
   const toggleDarkMode = () => setIsDarkMode((prev) => !prev);
 
-  return {
+  const value = {
     isDarkMode,
     toggleDarkMode,
     setDarkMode: setIsDarkMode,
     ready,
   };
+
+  return (
+    <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
+  );
 }
+
+// 5. Custom hook for easy use
+export const useTheme = () => {
+  const context = useContext(ThemeContext);
+  if (!context) throw new Error("useTheme must be used within a ThemeProvider");
+  return context;
+};

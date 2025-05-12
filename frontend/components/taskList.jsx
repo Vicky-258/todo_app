@@ -1,3 +1,4 @@
+import EmptyState from "./EmptyState";
 import TaskItem from "./TaskItem";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 
@@ -10,14 +11,14 @@ export default function TaskList({ tasks, deleteTask, updateTask }) {
     overflow-hidden" ref={parent}>
       {
         tasks.length == 0 ? (
-          <p className="dark:text-TextCDark text-TextC text-5xl">No Tasks 🎉</p>
+          <EmptyState />
         ) :
             tasks.map((task) => (
               <TaskItem
                 key={task.id}
                 TaskId={task.id}
                 title={task.title}
-                dueDate={task.dueDate}
+                dueDate={task.due_date}
                 priority={task.priority}
                 deleteTask={deleteTask}
                 updateTask={updateTask}
