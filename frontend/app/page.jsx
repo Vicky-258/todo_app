@@ -9,6 +9,7 @@ import { FiPlus } from "react-icons/fi";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { refreshToken, addTask, deleteTask, updateTask } from "@/services/taskService";
 
 export default function Home() {
   const [tasks, setTasks] = useState([]);
@@ -21,36 +22,29 @@ export default function Home() {
   }
 
   useEffect(() => {
-    // Fetch tasks from the API when the component mounts
     const fetchTasks = async () => {
       try {
         const response = await axios.get("http://127.0.0.1:8000/api/tasks/", {
-          withCredentials: true, // Make sure cookies are sent with the request
+          withCredentials: true,
         });
-
-        setTasks(response.data); // Update state with fetched tasks
+        setTasks(response.data);
       } catch (error) {
         if (error.response?.status === 401) {
-          // Try to refresh the token
-          try {
-            await axios.post(
-              "http://127.0.0.1:8000/api/token/refresh/",
-              {},
-              {
-                withCredentials: true,
-              }
-            );
-
-            // Retry the original request after refreshing
-            const response = await axios.get(
-              "http://127.0.0.1:8000/api/tasks/",
-              {
-                withCredentials: true,
-              }
-            );
-
-            setTasks(response.data);
-          } catch (refreshError) {
+          const refreshed = await refreshToken();
+          if (refreshed) {
+            try {
+              const response = await axios.get(
+                "http://127.0.0.1:8000/api/tasks/",
+                {
+                  withCredentials: true,
+                }
+              );
+              setTasks(response.data);
+            } catch (retryError) {
+              console.error("Retry after refresh failed:", retryError);
+              toast.error("❌ Still failed after refresh.");
+            }
+          } else {
             toast.error("⚠️ Session expired. Please log in again.");
             router.push("/auth/login");
           }
@@ -61,167 +55,57 @@ export default function Home() {
       }
     };
 
-    fetchTasks(); // Call the fetch function on mount
+    fetchTasks();
   }, []);
 
-  async function addTask(title, dueDate = null, priority = "low") {
+  async function handleAdd(title, dueDate, priority, description) {
     try {
-
-      const formattedDueDate = dueDate
-        ? new Date(dueDate).toLocaleDateString("en-CA")
-        : null;
-
-      const response = await axios.post(
-        "http://127.0.0.1:8000/api/tasks/",
-        {
-          title,
-          due_date: formattedDueDate,
-          priority: priority.charAt(0).toUpperCase() + priority.slice(1),
-        },
-        {
-          withCredentials: true, // Send cookies automatically
-        }
-      );
-
-      const createdTask = response.data;
-      setTasks((prevTasks) => [...prevTasks, createdTask]);
+      const createdTask = await postTask({
+        title,
+        dueDate,
+        priority,
+        description,
+      });
+      setTasks((prev) => [...prev, createdTask]);
       toast.success("✅ Task added!");
     } catch (error) {
       if (error.response?.status === 401) {
-        // Try to refresh the token
-        try {
-          await axios.post(
-            "http://127.0.0.1:8000/api/token/refresh/",
-            {},
-            {
-              withCredentials: true,
-            }
-          );
-
-          // Retry the original request after refreshing
-          const response = await axios.post(
-            "http://127.0.0.1:8000/api/tasks/",
-            {
-              title,
-              due_date: dueDate,
-              priority: priority.charAt(0).toUpperCase() + priority.slice(1),
-            },
-            {
-              withCredentials: true,
-            }
-          );
-
-          const createdTask = response.data;
-          setTasks((prevTasks) => [...prevTasks, createdTask]);
-          toast.success("✅ Task added!");
-        } catch (refreshError) {
-          toast.error("⚠️ Session expired. Please log in again.");
-          router.push("/auth/login");
-        }
+        toast.error("⚠️ Session expired. Please log in again.");
+        router.push("/auth/login");
       } else {
-        console.error("Error:", error);
+        console.error("Error adding task:", error);
+        toast.error("❌ Failed to add task.");
       }
     }
   }
 
-  async function deleteTask(id) {
-    try {
-      await axios.delete(`http://127.0.0.1:8000/api/tasks/${id}/`, {
-        withCredentials: true, // Send cookies automatically
-      });
-
-      setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
+  const handleDelete = async (id) => {
+    const success = await deleteTask(id);
+    if (success) {
+      setTasks((prev) => prev.filter((task) => task.id !== id));
       toast.success("🗑️ Task deleted!");
-    } catch (error) {
-      if (error.response?.status === 401) {
-        // Try to refresh the token
-        try {
-          await axios.post(
-            "http://127.0.0.1:8000/api/token/refresh/",
-            {},
-            {
-              withCredentials: true,
-            }
-          );
-
-          // Retry the original request after refreshing
-          await axios.delete(`http://127.0.0.1:8000/api/tasks/${id}/`, {
-            withCredentials: true,
-          });
-
-          setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
-          toast.success("🗑️ Task deleted!");
-        } catch (refreshError) {
-          toast.error("⚠️ Session expired. Please log in again.");
-          router.push("/auth/login");
-        }
-      } else {
-        console.error("Error:", error);
-      }
+    } else {
+      toast.error("❌ Could not delete task. Try again.");
     }
+  };
+
+  
+const handleUpdate = async (id, newTitle, newDueDate, newPriority) => {
+  const { success, data, error } = await updateTask(
+    id,
+    newTitle,
+    newDueDate,
+    newPriority
+  );
+
+  if (success) {
+    setTasks((prev) => prev.map((task) => (task.id === id ? data : task)));
+    toast.success("✅ Task updated!");
+  } else {
+    console.error("Update error:", error);
+    toast.error("❌ Failed to update task. Please try again.");
   }
-
-  async function updateTask(id, newTitle, newDueDate, newPriority) {
-    try {
-
-      const formattedDueDate = newDueDate
-        ? new Date(newDueDate).toLocaleDateString("en-CA")
-        : null;
-
-      const response = await axios.put(
-        `http://127.0.0.1:8000/api/tasks/${id}/`,
-        {
-          title: newTitle,
-          due_date: formattedDueDate,
-          priority: newPriority,
-        },
-        {
-          withCredentials: true, // Send cookies automatically
-        }
-      );
-
-      setTasks((prevTasks) =>
-        prevTasks.map((task) => (task.id === id ? response.data : task))
-      );
-      toast.success("✅ Task updated!");
-    } catch (error) {
-      if (error.response?.status === 401) {
-        // Try to refresh the token
-        try {
-          await axios.post(
-            "http://127.0.0.1:8000/api/token/refresh/",
-            {},
-            {
-              withCredentials: true,
-            }
-          );
-
-          // Retry the original request after refreshing
-          const response = await axios.put(
-            `http://127.0.0.1:8000/api/tasks/${id}/`,
-            {
-              title: newTitle,
-              due_date: formattedDueDate,
-              priority: newPriority,
-            },
-            {
-              withCredentials: true,
-            }
-          );
-
-          setTasks((prevTasks) =>
-            prevTasks.map((task) => (task.id === id ? response.data : task))
-          );
-          toast.success("✅ Task updated!");
-        } catch (refreshError) {
-          toast.error("⚠️ Session expired. Please log in again.");
-          router.push("/auth/login");
-        }
-      } else {
-        console.error("Error:", error);
-      }
-    }
-  }
+};
 
   return (
     <div className="flex bg-bground dark:bg-bgroundDark min-h-screen transition duration-500 ease-in-out">
@@ -245,12 +129,12 @@ export default function Home() {
         <TaskModal
           isOpen={open}
           onClose={() => setOpen(false)}
-          onSubmit={addTask}
+          onSubmit={handleAdd}
         />
         <TaskList
           tasks={tasks}
-          deleteTask={deleteTask}
-          updateTask={updateTask}
+          deleteTask={handleDelete}
+          updateTask={handleUpdate}
         />
       </div>
 
