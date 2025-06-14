@@ -5,6 +5,15 @@
   transition: background-color 0.4s ease-in-out, color 0.4s ease-in-out;
 }
 
+.rdp-day_disabled {
+  color: #9ca3af !important;
+  /* Tailwind's gray-400 */
+  opacity: 0.5 !important;
+  cursor: not-allowed !important;
+  text-decoration: line-through;
+  pointer-events: none;
+}
+
 @theme{
 
   --font-pro: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
@@ -14,8 +23,8 @@
   --color-primary: oklch(0.6 0.2177 257.42);
   --color-primaryDark: oklch(0.62 0.205577 255.4861);
   /*accent */
-  --color-accent: oklch(0.78 0.19 210);
-  --color-accentDark: oklch(0.70 0.21 212);
+  --color-accent: oklch(0.65 0.12 257);
+  --color-accentDark: oklch(0.55 0.13 255);
   /*Background */
   --color-bground: oklch(0.97 0 0);
   --color-bgroundDark: oklch(0.24 0 0);

@@ -87,7 +87,7 @@ export default function loginPage() {
         />
         <button
           type="submit"
-          className="w-full bg-primary hover:bg-blue-700 dark:bg-primaryDark text-white py-3 rounded-lg font-semibold transition duration-300"
+          className="w-full bg-primary hover:bg-blue-700 dark:bg-primaryDark text-white py-3 rounded-lg font-semibold transition duration-300 cursor-pointer"
         >
           Login
         </button>

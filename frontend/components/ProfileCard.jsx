@@ -1,4 +1,7 @@
-const ProfileCard = ({ icon : Icon, text, onClick }) => {
+import { useState } from "react";
+
+const ProfileCard = ({ icon: Icon, text, onClick }) => {
+
   return (
     <div
       className="realtive flex flex-row justify-between items-center
@@ -12,7 +15,9 @@ const ProfileCard = ({ icon : Icon, text, onClick }) => {
         <Icon className="text-TextC dark:text-TextCDark" />
         <span className="text-TextC dark:text-TextCDark">{text}</span>
       </div>
-      <button className="text-primary dark:text-primaryDark hover:text-blue-400 transition-transform transform hover:scale-105">
+      <button className="text-primary dark:text-primaryDark hover:text-blue-400 
+      transition-transform transform hover:scale-105"
+        onClick={onClick}>
         Edit
       </button>
     </div>

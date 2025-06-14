@@ -1,18 +1,5 @@
 import axios from "axios";
-
-export const refreshToken = async () => {
-  try {
-    await axios.post(
-      "http://127.0.0.1:8000/api/token/refresh/",
-      {},
-      { withCredentials: true }
-    );
-    return true;
-  } catch (error) {
-    console.error("❌ Refresh token failed:", error);
-    return false;
-  }
-};
+import { refreshToken } from "@/lib/auth";
 
 export const addTask = async ({
   title,
@@ -107,5 +94,114 @@ export const updateTask = async (id, newTitle, newDueDate, newPriority) => {
     }
 
     return { success: false, error };
+  }
+};
+
+
+export const updateUsername = async ({ username, current_password }) => {
+  try {
+    const res = await axios.put(
+      "http://127.0.0.1:8000/api/users/profile/update/username/",
+      { username, current_password },
+      { withCredentials: true }
+    );
+    return res.data;
+  } catch (err) {
+    if (err.response?.status === 401) {
+      const refreshed = await refreshToken();
+      if (refreshed) {
+        const retryRes = await axios.put(
+          "http://127.0.0.1:8000/api/users/profile/update/username/",
+          { username, current_password },
+          { withCredentials: true }
+        );
+        return retryRes.data;
+      } else {
+        throw new Error("Refresh failed");
+      }
+    } else {
+      throw err;
+    }
+  }
+};
+
+export const updatePassword = async ({ current_password, new_password }) => {
+  try {
+    const res = await axios.put(
+      "http://127.0.0.1:8000/api/users/profile/update/password/",
+      { current_password, new_password },
+      { withCredentials: true }
+    );
+    return res.data;
+  } catch (err) {
+    if (err.response?.status === 401) {
+      const refreshed = await refreshToken();
+      if (refreshed) {
+        const retryRes = await axios.put(
+          "http://127.0.0.1:8000/api/users/profile/update/password/",
+          { current_password, new_password },
+          { withCredentials: true }
+        );
+        return retryRes.data;
+      } else {
+        throw new Error("Refresh failed");
+      }
+    } else {
+      throw err;
+    }
+  }
+};
+
+export const updateEmail = async ({ new_email, current_password }) => {
+  try {
+    const res = await axios.put(
+      "http://127.0.0.1:8000/api/users/profile/update/email/",
+      { new_email, current_password },
+      { withCredentials: true }
+    );
+    return res.data;
+  } catch (err) {
+    if (err.response?.status === 401) {
+      const refreshed = await refreshToken();
+      if (refreshed) {
+        const retryRes = await axios.put(
+          "http://127.0.0.1:8000/api/users/profile/update/email/",
+          { new_email, current_password },
+          { withCredentials: true }
+        );
+        return retryRes.data;
+      } else {
+        throw new Error("Refresh failed");
+      }
+    } else {
+      throw err;
+    }
+  }
+};
+
+export const fetchUserProfile = async () => {
+  try {
+    const res = await axios.get("http://127.0.0.1:8000/api/users/profile/", {
+      withCredentials: true,
+    });
+    return res.data;
+  } catch (err) {
+    if (err.response?.status === 401) {
+      const refreshed = await refreshToken();
+      if (refreshed) {
+        const retryRes = await axios.get(
+          "http://127.0.0.1:8000/api/users/profile/",
+          {
+            withCredentials: true,
+          }
+        );
+        return retryRes.data;
+      } else {
+        throw new Error("Token refresh failed");
+      }
+    } else {
+      console.error("❌ Failed to fetch user profile:", err.message);
+      throw err;
+    }
   }
 };

@@ -7,7 +7,7 @@ const TaskItem = ({ TaskId, title, dueDate, priority, deleteTask, updateTask }) 
   const priorityColors = {
     high: "bg-redC dark:bg-redCDark",
     medium: "bg-yellow-400 dark:bg-yellow-500",
-    low: "bg-accent dark:bg-accentDark",
+    low: "bg-green-400 dark:bg-green-500",
   };
   const taskItemRef = useRef(null);
   const [isEditing, setIsEditing] = useState(false);
@@ -67,9 +67,10 @@ const TaskItem = ({ TaskId, title, dueDate, priority, deleteTask, updateTask }) 
     >
       {/* Priority Indicator */}
       <div
-        className={`absolute top-2 left-2 w-3 h-3 sm:w-4 sm:h-4 rounded-full cursor-pointer ${priorityColors[priority]}`}
+        className={`absolute top-2 left-2 w-2 h-2 sm:w-2 sm:h-2 rounded-full cursor-pointer ${priorityColors[priority.toLowerCase()]}`}
         onClick={handlePriorityChange}
         style={{ opacity: isEditing ? 1 : 0.7 }}
+        title={priority}
       ></div>
 
       {/* Task Info */}
@@ -117,7 +118,8 @@ const TaskItem = ({ TaskId, title, dueDate, priority, deleteTask, updateTask }) 
         ) : (
           <button
             className="p-1.5 sm:p-2 text-TextC dark:text-TextCDark hover:text-primary dark:hover:text-primaryDark"
-            onClick={() => setIsEditing(true)}
+              onClick={() => setIsEditing(true)}
+              title="Edit Task"
           >
             <Pencil size={16} />
           </button>
@@ -127,6 +129,7 @@ const TaskItem = ({ TaskId, title, dueDate, priority, deleteTask, updateTask }) 
           className="p-1.5 sm:p-2 text-TextC dark:text-TextCDark hover:text-redC
                          dark:hover:text-redCDark"
           onClick={() => deleteTask(TaskId)}
+          title="Delete Task"
         >
           <Trash size={16} />
         </button>

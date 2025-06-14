@@ -9,6 +9,7 @@ import { FiPlus } from "react-icons/fi";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { Toaster } from "react-hot-toast";
 import { refreshToken, addTask, deleteTask, updateTask } from "@/services/taskService";
 
 export default function Home() {
@@ -60,7 +61,7 @@ export default function Home() {
 
   async function handleAdd(title, dueDate, priority, description) {
     try {
-      const createdTask = await postTask({
+      const createdTask = await addTask({
         title,
         dueDate,
         priority,
@@ -109,6 +110,7 @@ const handleUpdate = async (id, newTitle, newDueDate, newPriority) => {
 
   return (
     <div className="flex bg-bground dark:bg-bgroundDark min-h-screen transition duration-500 ease-in-out">
+      <Toaster position="top-center" reverseOrder={false} />
       <TopSection isOpen={isSideBarOpen} ToggleSideBar={HandlesidebarOpen} />
 
       <div className="flex flex-1 pt-24 flex-col w-full items-center">
