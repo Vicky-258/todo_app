@@ -19,5 +19,12 @@ export function middleware(request) {
 }
 
 export const config = {
-  matcher: ["/",],
+  matcher: [
+    "/",
+    "/dashboard/:path*", 
+    "/profile/:path*", 
+    "/tasks/:path*", 
+    "/settings/:path*", 
+  ],
 };
+

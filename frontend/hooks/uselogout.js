@@ -1,18 +1,13 @@
-// hooks/useLogout.js
+
 "use client";
+
+import { logoutRequest } from "@/lib/auth";
 
 export default function useLogout() {
   const logout = async () => {
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/users/logout/", {
-        method: "POST",
-        credentials: "include", // important for sending cookies
-      });
-      if (res.ok) {
-        window.location.href = "/auth/login";
-      } else {
-        console.error("Logout failed");
-      }
+      await logoutRequest();
+      window.location.href = "/auth/login"; 
     } catch (err) {
       console.error("Error logging out:", err);
     }
