@@ -3,9 +3,8 @@
 import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { CalendarIcon, ClockIcon, PencilIcon } from "lucide-react";
+import { CalendarIcon, ClockIcon } from "lucide-react";
 import PriorityDropdown from "./PriorityDropdown";
-import { Calendar } from "./ui/calendar";
 import { Textarea } from "@/components/ui/textarea";
 import {
   Popover,
@@ -13,6 +12,8 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { format } from "date-fns"; // To format date
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const TaskModal = ({ isOpen, onClose, onSubmit }) => {
   const [task, setTask] = useState("");
@@ -55,18 +56,18 @@ const TaskModal = ({ isOpen, onClose, onSubmit }) => {
           }
         />
 
-        <div className="relative mt-0.5">
+        <div className="relative mt-4">
           <Popover>
             <PopoverTrigger asChild>
               <Button
                 variant="outline"
-                className="w-full justify-start text-left font-normal mt-4 hover:bg-transparent focus-visible:border-ring
-                focus-visible:ring-ring/50 focus-visible:ring-[3px]
-                 text-TextC dark:text-TextCDark"
+                className="w-full justify-start text-left font-normal hover:bg-transparent
+        focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]
+        text-TextC dark:text-TextCDark"
               >
                 <CalendarIcon className="mr-2 h-4 w-4" />
                 {dueDate ? (
-                  format(dueDate, "PPP")
+                  format(dueDate, "dd/MM/yyyy")
                 ) : (
                   <span>Pick a due date</span>
                 )}
@@ -76,18 +77,21 @@ const TaskModal = ({ isOpen, onClose, onSubmit }) => {
               className="w-auto p-0 bg-bground dark:bg-bgroundDark text-TextC dark:text-TextCDark"
               align="start"
             >
-              <Calendar
-                mode="single"
+              <DatePicker
                 selected={dueDate}
-                onSelect={setDueDate}
-                disabled={(date) =>
-                  date < new Date(new Date().setHours(0, 0, 0, 0))
+                onChange={(date) => setDueDate(date)}
+                minDate={new Date()}
+                inline
+                dayClassName={(date) =>
+                  date < new Date().setHours(0, 0, 0, 0)
+                    ? "text-muted pointer-events-none opacity-40"
+                    : undefined
                 }
-                initialFocus
               />
             </PopoverContent>
           </Popover>
         </div>
+
         <div className="relative mt-4">
           <Popover>
             <PopoverTrigger asChild>
