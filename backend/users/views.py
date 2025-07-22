@@ -1,14 +1,17 @@
 from django.http import JsonResponse
-from .serializers import UserRegistrationSerializer, UserProfileSerializer, PasswordChangeSerializer, EmailUpdateSerializer
 from .serializers import CustomTokenObtainPairSerializer
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, permissions
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.decorators import api_view
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import NotAuthenticated
 from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework.exceptions import ValidationError
+from .serializers import (UserRegistrationSerializer, UserProfileSerializer,
+                          PasswordChangeSerializer, EmailUpdateSerializer,
+                          ProfilePicSerializer)
 
 class UserRegistrationView(APIView):
     def post(self, request):
@@ -101,7 +104,7 @@ class UsernameUpdateView(APIView):
         current_password = request.data.get('current_password')
 
         if not user.check_password(current_password):
-            return Response({"error": "Incorrect current password."}, status=status.HTTP_403_FORBIDDEN)
+            raise ValidationError({"current_password": "Incorrect current password."})
 
         serializer = UserProfileSerializer(user, data=request.data, partial=True)
         if serializer.is_valid():
@@ -173,4 +176,17 @@ class UserProfileView(APIView):
             "id": user.id,
             "username": user.username,
             "email": user.email,
+            "profilePic": request.build_absolute_uri(user.profile_pic.url) if user.profile_pic else None
         })
+
+
+class ProfilePicUpdateView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def patch(self, request):
+        user = request.user
+        serializer = ProfilePicSerializer(user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"message": "Profile picture updated successfully."})
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

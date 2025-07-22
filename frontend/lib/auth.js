@@ -1,12 +1,8 @@
-import axios from "axios";
+import axiosInstance from "./axiosInstance";
 
 export const refreshToken = async () => {
   try {
-    await axios.post(
-      "http://127.0.0.1:8000/api/token/refresh/",
-      {},
-      { withCredentials: true }
-    );
+    await axiosInstance.post("/api/token/refresh/");
     return true;
   } catch (error) {
     console.error("❌ Refresh token failed:", error);
@@ -15,14 +11,11 @@ export const refreshToken = async () => {
 };
 
 export const logoutRequest = async () => {
-  const res = await fetch("http://127.0.0.1:8000/api/users/logout/", {
-    method: "POST",
-    credentials: "include",
-  });
-
-  if (!res.ok) {
-    throw new Error("Logout failed");
+  try {
+    const res = await axiosInstance.post("/api/users/logout/");
+    return res;
+  } catch (err) {
+    console.error("❌ Logout failed:", err);
+    throw err;
   }
-
-  return res;
 };

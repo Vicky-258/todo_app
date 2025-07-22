@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 from datetime import timedelta
 from decouple import config
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -84,10 +85,15 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'todo_db',         # ← Use the name of the DB you created
+        'USER': 'postgres',        # ← Your PostgreSQL username
+        'PASSWORD': 'postgres258',# ← Your PostgreSQL password
+        'HOST': 'localhost',       # ← Default if local
+        'PORT': '5432',            # ← Default PostgreSQL port
     }
 }
+
 
 
 # Password validation
@@ -143,6 +149,9 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",  # Your frontend
     "http://10.1.2.241:3000"
 ]
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
 
 CORS_ALLOW_CREDENTIALS = True
 

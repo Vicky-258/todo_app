@@ -2,8 +2,6 @@ import clsx from "clsx";
 import { Moon, Sun } from "lucide-react";
 import { useDarkMode } from "@/lib/Hooks/useDarkMode";
 import { useRef, useEffect } from "react";
-import ProfileIcon from "./ProfileIcon";
-import ProfilePic from "@/public/ProfilePic.jpg";
 
 export default function SideBar({ isOpen, setIsOpen }) {
   const sidebarRef = useRef(null);
@@ -24,15 +22,15 @@ export default function SideBar({ isOpen, setIsOpen }) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isOpen]);
 
-  // avoid flicker 🔦
-
   return (
     <div
       ref={sidebarRef}
       className={clsx(
-        "absolute top-12 pl-4 pr-6 py-4 md:pr-32 h-[calc(100vh-3rem)] transition-transform duration-500 ease-in-out",
-        "backdrop-blur-xl md:backdrop-blur-none rounded-b-lg text-TextC dark:text-TextCDark",
-        isOpen ? "translate-x-0" : "-translate-x-64"
+        "fixed top-12 pl-4 pr-6 py-4 md:pr-32 h-[calc(100vh-3rem)] transition-transform duration-500 ease-in-out",
+        "backdrop-blur-xl md:backdrop-blur-none rounded-b-lg text-TextC dark:text-TextCDark bg-bground dark:bg-bgroundDark" ,
+        "z-50", // Keep this to ensure it stays on top!
+        "w-64", // <--- Use your desired WIDTH here, if not w-64, change it!
+        isOpen ? "translate-x-0 left-0" : "-translate-x-full" // <--- IMPORTANT: Changed -translate-x-64 to -translate-x-full and added left-0
       )}
     >
       <ul className="flex flex-col space-y-4 text-TextC dark:text-TextCDark font-pro font-medium">
@@ -45,12 +43,6 @@ export default function SideBar({ isOpen, setIsOpen }) {
         <button onClick={toggleDarkMode}>
           {isDarkMode ? <Sun size={26} /> : <Moon size={26} />}
         </button>
-        <div className="md:invisible md:pointer-">
-          <ProfileIcon
-            className="visible md:invisible md:pointer-events-none w-10 h-10 sm:w-12 sm:h-12"
-            src={ProfilePic}
-          />
-        </div>
       </div>
     </div>
   );

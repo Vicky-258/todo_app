@@ -2,7 +2,6 @@ from rest_framework import serializers
 from .models import User
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from typing import Any
-from django.db import transaction
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
@@ -14,25 +13,11 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         }
 
     def create(self, validated_data):
-        from rest_framework_simplejwt.tokens import RefreshToken
-
-        with transaction.atomic():
-            password = validated_data.pop('password')
-            user = User(**validated_data)
-            user.set_password(password)
-            user.save()
-
-            refresh = RefreshToken.for_user(user)
-
-            return {
-                'user': {
-                    'id': user.id,
-                    'username': user.username,
-                    'email': user.email,
-                },
-                'refresh': str(refresh),
-                'access': str(refresh.access_token),
-            }
+        password = validated_data.pop('password')
+        user = User(**validated_data)
+        user.set_password(password)
+        user.save()
+        return user
 
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -59,9 +44,20 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         return data
 
 class UserProfileSerializer(serializers.ModelSerializer):
+    current_password = serializers.CharField(write_only=True)
+
     class Meta:
         model = User
-        fields = ['username']
+        fields = ['username', 'current_password']
+
+    def validate_current_password(self, value):
+        user = self.context['request'].user
+        if not user.check_password(value):
+            raise serializers.ValidationError({
+                "current_password": "Current password is incorrect."
+            })
+        return value
+
 
 class PasswordChangeSerializer(serializers.Serializer):
     current_password = serializers.CharField(write_only=True)
@@ -99,4 +95,9 @@ class EmailUpdateSerializer(serializers.Serializer):
         instance.email = validated_data['new_email']
         instance.save()
         return instance
+
+class ProfilePicSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['profile_pic']
 

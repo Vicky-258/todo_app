@@ -11,7 +11,13 @@ export default function ProfileIcon({ src, className = "" }) {
                   ${className}`}
     >
       {src ? (
-        <Image src={src} alt="Profile" className="w-full h-full object-cover" />
+        <Image
+          src={src}
+          alt="Profile"
+          className="w-full h-full object-cover"
+          width={180}
+          height={180}
+        />
       ) : (
         <User className="text-gray-500 dark:text-gray-400 w-5 h-5 sm:w-6 sm:h-6" />
       )}

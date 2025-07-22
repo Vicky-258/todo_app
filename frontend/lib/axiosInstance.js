@@ -1,16 +1,14 @@
 import axios from "axios";
-import { refreshToken } from "./taskService"; // Make sure this path is correct
-import useLogout from "@/lib/hooks/useLogout"; // Optional if you use hook logic here
+import { refreshToken } from "./auth";
+import toast from "react-hot-toast";
 
 const axiosInstance = axios.create({
   baseURL: "http://127.0.0.1:8000",
-  withCredentials: true, // Important for cookies!
+  withCredentials: true,
 });
 
-// Flag to avoid infinite loops
 let isRefreshing = false;
 
-// ⛔ For requests
 axiosInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
@@ -29,15 +27,20 @@ axiosInstance.interceptors.response.use(
         isRefreshing = false;
 
         if (refreshed) {
-          return axiosInstance(originalRequest); // Retry original request
+          return axiosInstance(originalRequest);
         }
       } catch (refreshError) {
         isRefreshing = false;
-        console.error("Refresh token failed");
+        console.error("🔒 Refresh token failed, redirecting to login");
 
-        // ❌ Optional: Auto logout
-        if (typeof window !== "undefined") {
-          window.location.href = "/auth/login";
+        if (
+          typeof window !== "undefined" &&
+          !originalRequest.url.includes("/profile")
+        ) {
+          toast.error("Session expired. Redirecting to login...");
+          setTimeout(() => {
+            window.location.href = "/auth/login";
+          }, 2000);
         }
       }
     }

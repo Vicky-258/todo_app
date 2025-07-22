@@ -1,30 +1,40 @@
 import { NextResponse } from "next/server";
 
 export function middleware(request) {
-  const token = request.cookies.get("accessToken");
+  const token = request.cookies.get("accessToken")?.value;
+  const { pathname } = request.nextUrl;
 
   const isAuthPage =
-    request.nextUrl.pathname.startsWith("/auth/login") ||
-    request.nextUrl.pathname.startsWith("/auth/register");
+    pathname.startsWith("/auth/login") || pathname.startsWith("/auth/register");
 
-  if (!token && !isAuthPage) {
-    return NextResponse.redirect(new URL("/auth/login", request.url));
+  const isPublic = [
+    "/_next",
+    "/favicon.ico",
+    "/auth/login",
+    "/auth/register",
+    "/api/auth",
+  ].some((path) => pathname.startsWith(path));
+
+  if (isPublic) {
+    return NextResponse.next();
   }
 
-  if (token && isAuthPage) {
-    return NextResponse.redirect(new URL("/", request.url));
+  if (!token) {
+    if (pathname.startsWith("/api")) {
+      return new NextResponse(JSON.stringify({ message: "Unauthorized" }), {
+        status: 401,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    const loginUrl = new URL("/auth/login", request.url);
+    loginUrl.searchParams.set("redirectedFrom", pathname);
+    return NextResponse.redirect(loginUrl);
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: [
-    "/",
-    "/dashboard/:path*", 
-    "/profile/:path*", 
-    "/tasks/:path*", 
-    "/settings/:path*", 
-  ],
+  matcher: ["/((?!_next|favicon.ico|auth|api/auth).*)", "/api/:path*"],
 };
-

@@ -3,7 +3,7 @@
 import { useDarkMode } from "@/lib/Hooks/useDarkMode";
 import React, { useState } from "react";
 import axios from "axios";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
@@ -46,8 +46,7 @@ export default function Register() {
     try {
       const response = await axios.post(
         "http://127.0.0.1:8000/api/users/register/",
-        form,
-        { withCredentials: true } // 👈 Needed to allow cookies
+        form
       );
 
       // Store only safe user info (optional)

@@ -1,6 +1,5 @@
 import "./globals.css";
-import { ThemeProvider } from "@/lib/context/ThemeContext";
-
+import { ThemeProvider} from "@/lib/context/ThemeContext";
 
 export const metadata = {
   title: "TO DO App",
@@ -8,12 +7,10 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
-
-  
   return (
     <html lang="en">
       <body className="antialiased">
-        <ThemeProvider>{children}</ThemeProvider>
+          <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>
   );

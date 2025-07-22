@@ -1,14 +1,12 @@
 "use client";
 import { createContext, useContext, useEffect, useState } from "react";
 
-// 1. Create the context
 const ThemeContext = createContext();
 
 export function ThemeProvider({ children }) {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [ready, setReady] = useState(false);
 
-  // 2. On mount, check saved theme or system preference
   useEffect(() => {
     if (typeof window === "undefined") return;
 

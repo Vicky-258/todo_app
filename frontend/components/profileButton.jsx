@@ -31,12 +31,12 @@ export default function ProfileDropdown({ imageSrc, className = "" }) {
         </div>
 
         {isOpen && (
-          <div className="absolute right-0 mt-2 w-40 bg-white dark:bg-gray-800 rounded-md shadow-lg z-50">
-            <ul className="py-1 text-sm text-gray-700 dark:text-gray-200">
+          <div className="absolute right-0 mt-2 w-40 bg-bground dark:bg-bgroundDark rounded-md shadow-lg z-50">
+            <ul className="py-1 text-sm text-TextC dark:text-TextCDark">
               <li>
                 <Link
                   href="/profile"
-                  className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
+                  className="block px-4 py-2 hover:bg-bground dark:hover:bg-bgroundDark rounded-md"
                 >
                   Profile Page
                 </Link>
@@ -44,7 +44,7 @@ export default function ProfileDropdown({ imageSrc, className = "" }) {
               <li>
                 <button
                   onClick={logout}
-                  className="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
+                  className="w-full text-left px-4 py-2 hover:bg-bground dark:hover:bg-bgroundDark rounded-md"
                 >
                   Logout
                 </button>

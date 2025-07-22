@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @custom-variant dark (&:where(.dark, .dark *));
 
+
 :root {
   transition: background-color 0.4s ease-in-out, color 0.4s ease-in-out;
 }
@@ -12,6 +13,19 @@
   cursor: not-allowed !important;
   text-decoration: line-through;
   pointer-events: none;
+}
+
+/* Align weekday labels in the calendar */
+.rdp-head {
+  display: grid !important;
+  grid-template-columns: repeat(7, 1fr) !important;
+  text-align: center;
+}
+
+/* Align the week rows too */
+.rdp-row {
+  display: grid !important;
+  grid-template-columns: repeat(7, 1fr) !important;
 }
 
 @theme{
@@ -54,4 +68,64 @@
   --color-FloatingShadowDark: oklch(0 0 0 / 80%);
 }
 
+.react-datepicker {
+  background-color: var(--color-bgroundDark) !important;
+  color: var(--color-TextCDark) !important;
+  border: 1px solid var(--color-borderCDark) !important;
+  border-radius: 0.75rem !important;
+  box-shadow: 0 4px 24px var(--color-CardShadowsDark) !important;
+  font-family: var(--font-pro) !important;
+}
 
+.react-datepicker__header {
+  background-color: var(--color-bgroundDark) !important;
+  border-bottom: 1px solid var(--color-borderCDark) !important;
+  color: var(--color-TextCDark) !important;
+}
+
+.react-datepicker__current-month {
+  color: var(--color-TextCDark) !important;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.react-datepicker__day-name {
+  color: var(--color-borderCDark) !important;
+  font-weight: 500;
+}
+
+.react-datepicker__day {
+  color: var(--color-TextCDark) !important;
+  border-radius: 9999px !important;
+  transition: background-color 0.2s ease;
+}
+
+.react-datepicker__day:hover {
+  background-color: var(--color-primaryDark) !important;
+  color: white !important;
+}
+
+.react-datepicker__day--selected,
+.react-datepicker__day--keyboard-selected {
+  background-color: var(--color-primary) !important;
+  color: white !important;
+}
+
+.react-datepicker__day--today {
+  border-bottom: 2px solid var(--color-accent) !important;
+  font-weight: bold;
+}
+
+.react-datepicker__navigation {
+  top: 10px !important;
+}
+
+.react-datepicker__navigation-icon::before {
+  border-color: var(--color-TextCDark) !important;
+}
+
+.react-datepicker__today-button {
+  background-color: var(--color-cardDark) !important;
+  color: var(--color-TextCDark) !important;
+  border-top: 1px solid var(--color-borderCDark) !important;
+}

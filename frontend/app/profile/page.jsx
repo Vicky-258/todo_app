@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import ProfileIcon from "@/components/ProfileIcon";
-import ProfilePic from "@/public/ProfilePic.jpg";
 import ProfileCard from "@/components/ProfileCard";
 import ProfileModal from "@/components/ProfileModal";
 import { FaUser, FaEnvelope, FaLock } from "react-icons/fa";
@@ -10,10 +9,11 @@ import {
   updateUsername,
   updatePassword,
   updateEmail,
-  fetchUserProfile,
 } from "@/services/taskService";
+import { fetchUserProfile } from "@/services/userService";
 import toast from "react-hot-toast";
 import { Toaster } from "react-hot-toast";
+import { updateProfilePicture } from "@/services/userService";
 
 const ProfilePage = () => {
   const [user, setUser] = useState(null);
@@ -26,6 +26,13 @@ const ProfilePage = () => {
         setUser(data);
       } catch (err) {
         console.error("💥 Couldn't load profile:", err.message);
+
+        if (err.response?.status === 401) {
+          toast.error("Session expired. Redirecting to login...");
+          setTimeout(() => {
+            window.location.href = "/auth/login";
+          }, 2000);
+        }
       } finally {
         setLoading(false);
       }
@@ -36,7 +43,23 @@ const ProfilePage = () => {
 
   const [open, setOpen] = useState(false);
   const [modalType, setModalType] = useState(null);
-  const [modalSubmit, setModalSubmit] = useState(() => () => {});
+  const [modalSubmit, setModalSubmit] = useState(() => () => { });
+  
+  const handleProfilePicChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("profile_pic", file);
+
+    try {
+      const data = await updateProfilePicture(formData);
+      setUser((prev) => ({ ...prev, profilePic: data.profilePic }));
+      toast.success("✅ Profile picture updated!");
+    } catch (err) {
+      toast.error("❌ Failed to update picture");
+    }
+  };  
 
   const handleUsernameUpdate = async (formData) => {
     const payload = {
@@ -118,7 +141,22 @@ const ProfilePage = () => {
           Profile
         </h1>
         <div className="flex flex-col items-center justify-center gap-4">
-          <ProfileIcon src={user.profilePic} className="w-[180px] h-[180px]" />
+          <div className="relative group">
+            <ProfileIcon
+              src={user?.profilePic}
+              className="w-[180px] h-[180px]"
+            />
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleProfilePicChange}
+              className="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer"
+              title=""
+            />
+            <div className="absolute bottom-0 left-0 w-full text-center bg-bground dark:bg-bgroundDark text-TextC dark:text-TextCDark py-1 text-sm opacity-0 group-hover:opacity-100 transition">
+              Click to Change
+            </div>
+          </div>
           <div className="flex flex-col items-center justify-center">
             <h2 className="text-4xl text-TextC dark:text-TextCDark">
               {user.username}
