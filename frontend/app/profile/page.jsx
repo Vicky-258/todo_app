@@ -43,8 +43,8 @@ const ProfilePage = () => {
 
   const [open, setOpen] = useState(false);
   const [modalType, setModalType] = useState(null);
-  const [modalSubmit, setModalSubmit] = useState(() => () => { });
-  
+  const [modalSubmit, setModalSubmit] = useState(() => () => {});
+
   const handleProfilePicChange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -59,7 +59,7 @@ const ProfilePage = () => {
     } catch (err) {
       toast.error("❌ Failed to update picture");
     }
-  };  
+  };
 
   const handleUsernameUpdate = async (formData) => {
     const payload = {
@@ -97,7 +97,6 @@ const ProfilePage = () => {
       );
     }
   };
-  
 
   const handlePasswordUpdate = async (formData) => {
     if (formData.newPassword !== formData.confirmPassword) {
@@ -169,21 +168,24 @@ const ProfilePage = () => {
           onSubmit={modalSubmit}
           modalType={modalType}
         />
-        <div className="flex flex-col items-center justify-center gap-4">
+        <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-5 w-full max-w-4xl">
           <ProfileCard
             icon={FaUser}
-            text="Username"
-            onClick={() => handleOpen("username")}
+            label="Username"
+            value={user.username}
+            onClick={() => open("username")}
           />
           <ProfileCard
             icon={FaEnvelope}
-            text="Email"
-            onClick={() => handleOpen("email")}
+            label="Email"
+            value={user.email}
+            onClick={() => open("email")}
           />
           <ProfileCard
             icon={FaLock}
-            text="Change Password"
-            onClick={() => handleOpen("password")}
+            label="Change Password"
+            value="We would like to keep your account secure"
+            onClick={() => open("password")}
           />
         </div>
       </div>

@@ -3,7 +3,7 @@ import { Moon, Sun } from "lucide-react";
 import { useDarkMode } from "@/lib/Hooks/useDarkMode";
 import { useRef, useEffect } from "react";
 
-export default function SideBar({ isOpen, setIsOpen }) {
+export default function SideBar({ isOpen, setIsOpen, setFilterType }) {
   const sidebarRef = useRef(null);
   const { isDarkMode, toggleDarkMode, ready } = useDarkMode();
 
@@ -26,17 +26,44 @@ export default function SideBar({ isOpen, setIsOpen }) {
     <div
       ref={sidebarRef}
       className={clsx(
-        "fixed top-12 pl-4 pr-6 py-4 md:pr-32 h-[calc(100vh-3rem)] transition-transform duration-500 ease-in-out",
-        "backdrop-blur-xl md:backdrop-blur-none rounded-b-lg text-TextC dark:text-TextCDark bg-bground dark:bg-bgroundDark" ,
-        "z-50", // Keep this to ensure it stays on top!
-        "w-64", // <--- Use your desired WIDTH here, if not w-64, change it!
-        isOpen ? "translate-x-0 left-0" : "-translate-x-full" // <--- IMPORTANT: Changed -translate-x-64 to -translate-x-full and added left-0
+        "fixed top-12 pl-4 pr-6 py-6 md:pr-32 h-[calc(100vh-3rem)] transition-transform duration-500 ease-in-out",
+        "backdrop-blur-xl md:backdrop-blur-none rounded-b-lg text-TextC dark:text-TextCDark bg-bground dark:bg-bgroundDark",
+        "z-50 w-64", // width
+        isOpen ? "translate-x-0 left-0" : "-translate-x-full"
       )}
     >
-      <ul className="flex flex-col space-y-4 text-TextC dark:text-TextCDark font-pro font-medium">
-        <li className="p-2">Today</li>
-        <li className="p-2">Upcoming</li>
-        <li className="p-2">Completed</li>
+      <ul className="flex flex-col gap-3 pt-8 px-2 font-pro font-medium text-TextC dark:text-TextCDark">
+        <li
+          className="p-2 rounded hover:bg-hoverLight dark:hover:bg-hoverDark cursor-pointer"
+          onClick={() => setFilterType("")}
+        >
+          All
+        </li>
+        <li
+          className="p-2 rounded hover:bg-hoverLight dark:hover:bg-hoverDark cursor-pointer"
+          onClick={() => setFilterType("today")}
+        >
+          Today
+        </li>
+        <li
+          className="p-2 rounded hover:bg-hoverLight dark:hover:bg-hoverDark cursor-pointer"
+          onClick={() => setFilterType("upcoming")}
+        >
+          Upcoming
+        </li>
+        <hr className="my-2 border-borderC dark:border-borderCDark" />
+        <li
+          className="p-2 rounded hover:bg-hoverLight dark:hover:bg-hoverDark cursor-pointer"
+          onClick={() => setFilterType("uncompleted")}
+        >
+          Uncompleted
+        </li>
+        <li
+          className="p-2 rounded hover:bg-hoverLight dark:hover:bg-hoverDark cursor-pointer"
+          onClick={() => setFilterType("completed")}
+        >
+          Completed
+        </li>
       </ul>
 
       <div className="w-full absolute bottom-16 md:bottom-4 flex justify-between items-center">

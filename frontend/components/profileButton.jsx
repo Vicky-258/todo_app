@@ -5,7 +5,7 @@ import ProfileIcon from "./ProfileIcon";
 import Link from "next/link";
 import useLogout from "@/hooks/uselogout";
 
-export default function ProfileDropdown({ imageSrc, className = "" }) {
+export default function ProfileButton({ imageSrc, className = "" }) {
     const [isOpen, setIsOpen] = useState(false);
     const menuRef = useRef(null);
 

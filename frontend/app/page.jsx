@@ -20,6 +20,7 @@ export default function Home() {
   const [displayopen, setDisplayOpen] = useState(false);
   const [isSideBarOpen, setisSideBarOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
+  const [filterType, setFilterType] = useState("uncompleted");
 
   const router = useRouter();
 
@@ -31,7 +32,12 @@ export default function Home() {
   useEffect(() => {
     const fetchTasks = async () => {
       try {
-        const response = await axios.get("http://127.0.0.1:8000/api/tasks/", {
+        const url =
+          filterType === ""
+            ? "http://127.0.0.1:8000/api/tasks/"
+            : `http://127.0.0.1:8000/api/tasks/?filter=${filterType}`;
+
+        const response = await axios.get(url, {
           withCredentials: true,
         });
         setTasks(response.data);
@@ -40,12 +46,14 @@ export default function Home() {
           const refreshed = await refreshToken();
           if (refreshed) {
             try {
-              const response = await axios.get(
-                "http://127.0.0.1:8000/api/tasks/",
-                {
-                  withCredentials: true,
-                }
-              );
+              const url =
+                filterType === ""
+                  ? "http://127.0.0.1:8000/api/tasks/"
+                  : `http://127.0.0.1:8000/api/tasks/?filter=${filterType}`;
+
+              const response = await axios.get(url, {
+                withCredentials: true,
+              });
               setTasks(response.data);
             } catch (retryError) {
               console.error("Retry after refresh failed:", retryError);
@@ -63,7 +71,7 @@ export default function Home() {
     };
 
     fetchTasks();
-  }, []);
+  }, [filterType]); // ← refetch when filter changes
 
   async function handleAdd(title, dueDate, priority, description) {
     try {
@@ -159,7 +167,12 @@ export default function Home() {
           modelOpen={displayopen}
         />
       </div>
-      <SideBar isOpen={isSideBarOpen} setIsOpen={setisSideBarOpen} />
+
+      <SideBar
+        isOpen={isSideBarOpen}
+        setIsOpen={setisSideBarOpen}
+        setFilterType={setFilterType}
+      />
     </div>
   );
 }
