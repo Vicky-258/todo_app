@@ -4,13 +4,13 @@ import React from "react";
 import { CalendarIcon, ClockIcon } from "lucide-react";
 import { format } from "date-fns";
 
-const TaskModalDisplay = ({ isOpen, onClose, task }) => {
-    if (!isOpen || !task) return null;
-      const priorityStyles = {
-        high: "text-redC",
-        medium: "text-yellow-700",
-        low: "text-green-700",
-      };
+const TaskModalDisplay = ({ isOpen, onClose, task, onEditClick }) => {
+  if (!isOpen || !task) return null;
+  const priorityStyles = {
+    high: "text-redC",
+    medium: "text-yellow-700",
+    low: "text-green-700",
+  };
 
   return (
     <div
@@ -73,10 +73,10 @@ const TaskModalDisplay = ({ isOpen, onClose, task }) => {
         <div className="mt-6 flex justify-end gap-4">
           <button
             onClick={() => {
-              // Trigger your edit logic here
-              console.log("Edit clicked");
+              onClose();
+              onEditClick(task);
             }}
-            className="bg-primary dark:bg-primaryDark text-TextC dark:text-TextCDark px-4 py-2 rounded-lg"
+            className="bg-primary dark:bg-primaryDark text-TextCDark px-4 py-2 rounded-md hover:bg-primaryHover dark:hover:bg-primaryDarkHover"
           >
             Edit
           </button>

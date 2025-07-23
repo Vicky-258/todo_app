@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { CalendarIcon, ClockIcon } from "lucide-react";
@@ -15,20 +15,46 @@ import { format } from "date-fns"; // To format date
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-const TaskModal = ({ isOpen, onClose, onSubmit }) => {
+const TaskModal = ({
+  isOpen,
+  onClose,
+  onSubmit,
+  taskToEdit,
+  setTaskToEdit,
+  isEditMode,
+}) => {
   const [task, setTask] = useState("");
   const [dueDate, setDueDate] = useState(null);
   const [priority, setpriority] = useState("low");
   const [dueTime, setDueTime] = useState("");
   const [description, setDescription] = useState("");
 
-  if (!isOpen) return null;
-
   const handleSubmit = () => {
-    onSubmit(task, dueDate, priority, description);
+    if (isEditMode) {
+      onSubmit(taskToEdit.id, task, dueDate, priority, description, dueTime);
+    } else {
+      onSubmit(task, dueDate, priority, description, dueTime);
+    }
     setTask("");
+    setDueDate(null);
+    setDueTime("");
+    setpriority("low");
+    setDescription("");
+    if (setTaskToEdit) setTaskToEdit(null); 
     onClose();
   };
+
+  useEffect(() => {
+    if (isEditMode && taskToEdit) {
+      setTask(taskToEdit.title || "");
+      setDueDate(taskToEdit.due_date ? new Date(taskToEdit.due_date) : null);
+      setpriority(taskToEdit.priority || "low");
+      setDueTime(taskToEdit.due_time || "");
+      setDescription(taskToEdit.description || "");
+    }
+  }, [taskToEdit]);
+
+  if (!isOpen) return null;
 
   return (
     <div
@@ -41,7 +67,7 @@ const TaskModal = ({ isOpen, onClose, onSubmit }) => {
         onClick={(e) => e.stopPropagation()}
       >
         <h2 className="text-xl text-TextC dark:text-TextCDark font-semibold mb-4 flex items-center gap-2">
-          📝 New Task
+          {isEditMode ? "Edit Task" : "New Task"}
         </h2>
 
         <Input

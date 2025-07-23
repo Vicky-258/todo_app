@@ -21,6 +21,9 @@ export default function Home() {
   const [isSideBarOpen, setisSideBarOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
   const [filterType, setFilterType] = useState("uncompleted");
+  const [taskToEdit, setTaskToEdit] = useState(null);
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const router = useRouter();
 
@@ -104,12 +107,22 @@ export default function Home() {
     }
   };
 
-  const handleUpdate = async (id, newTitle, newDueDate, newPriority) => {
+  const handleUpdate = async (
+    id,
+    newTitle,
+    newDueDate,
+    newPriority,
+    newDescription,
+    newDueTime
+  ) => {
     const { success, data, error } = await updateTask(
       id,
       newTitle,
       newDueDate,
-      newPriority
+      newPriority,
+      undefined,
+      newDescription,
+      newDueTime
     );
 
     if (success) {
@@ -147,15 +160,36 @@ export default function Home() {
           </div>
         </div>
         <TaskModal
-          isOpen={addopen}
-          onClose={() => setAddOpen(false)}
-          onSubmit={handleAdd}
+          isOpen={addopen || isModalOpen}
+          onClose={() => {
+            setAddOpen(false);
+            setIsModalOpen(false);
+            setIsEditMode(false);
+            setTaskToEdit(null);
+          }}
+          onSubmit={(...args) => {
+            if (isEditMode) {
+              handleUpdate(...args);
+            } else {
+              handleAdd(...args);
+            }
+          }}
+          taskToEdit={taskToEdit}
+          setTaskToEdit={setTaskToEdit}
+          isEditMode={isEditMode}
         />
+
         <TaskModalDisplay
           isOpen={displayopen}
           onClose={() => setDisplayOpen(false)}
           task={selectedTask}
+          onEditClick={(task) => {
+            setTaskToEdit(task);
+            setIsEditMode(true);
+            setIsModalOpen(true);
+          }}
         />
+
         <TaskGrid
           tasks={tasks}
           deleteTask={handleDelete}

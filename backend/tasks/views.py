@@ -7,6 +7,8 @@ from .models import Task
 from .serializers import TaskSerializer
 from rest_framework.exceptions import NotAuthenticated
 
+from django.utils.timezone import now
+
 class TaskListCreateView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = TaskSerializer
@@ -15,7 +17,21 @@ class TaskListCreateView(generics.ListCreateAPIView):
         user = self.request.user
         if not user or not user.is_authenticated:
             raise NotAuthenticated("Authentication credentials were not provided or expired.")
-        return Task.objects.filter(user=user)
+
+        tasks = Task.objects.filter(user=user)
+        filter_type = self.request.query_params.get('filter')
+        today = now().date()
+
+        if filter_type == 'today':
+            tasks = tasks.filter(due_date__date=today)
+        elif filter_type == 'completed':
+            tasks = tasks.filter(is_completed=True)
+        elif filter_type == 'upcoming':
+            tasks = tasks.filter(due_date__date__gt=today, is_completed=False)
+        elif filter_type == "uncompleted":
+            tasks = tasks.filter(is_completed=False)
+
+        return tasks
 
     def perform_create(self, serializer):
         user = self.request.user
