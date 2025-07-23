@@ -2,9 +2,9 @@
 
 import { useDarkMode } from "@/lib/Hooks/useDarkMode";
 import React, { useState } from "react";
-import axios from "axios";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { registerAndLoginUser } from "@/services/userService";
 import Link from "next/link";
 
 export default function Register() {
@@ -22,47 +22,36 @@ export default function Register() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
 
-    // Validation checks
-    if (!form.username) {
-      toast.error("🚫 Username is required!");
-      return;
-    }
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    if (!form.email || !emailPattern.test(form.email)) {
-      toast.error("🚫 Please enter a valid email address!");
-      return;
-    }
+  if (!form.username) {
+    toast.error("🚫 Username is required!");
+    return;
+  }
 
-    if (!form.password || form.password.length < 6) {
-      toast.error("🚫 Password must be at least 6 characters!");
-      return;
-    }
+  const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  if (!form.email || !emailPattern.test(form.email)) {
+    toast.error("🚫 Please enter a valid email address!");
+    return;
+  }
 
-    // If validation passed, proceed with the API request
-    try {
-      const response = await axios.post(
-        "http://127.0.0.1:8000/api/users/register/",
-        form
-      );
+  if (!form.password || form.password.length < 6) {
+    toast.error("🚫 Password must be at least 6 characters!");
+    return;
+  }
 
-      // Store only safe user info (optional)
-      localStorage.setItem("user", JSON.stringify(response.data.user));
+  try {
+    await registerAndLoginUser(form);
 
-      // Clear the form after successful registration
-      setForm({ username: "", email: "", password: "" });
-
-      // Redirect to login or dashboard page
-      router.push("/");
-    } catch (error) {
-      const errorMsg =
-        error.response?.data?.message || "Registration failed. Try again!";
-      toast.error(`🚫 ${errorMsg}`);
-    }
-  };
+    router.push("/");
+  } catch (error) {
+    const errorMsg =
+      error.response?.data?.message || "Registration failed. Try again!";
+    toast.error(`🚫 ${errorMsg}`);
+  }
+};
 
   return (
     <div className="bg-card dark:bg-cardDark p-8 rounded-2xl shadow-md w-full max-w-sm">

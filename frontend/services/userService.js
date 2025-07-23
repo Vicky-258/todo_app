@@ -1,5 +1,6 @@
 import axiosInstance from "@/lib/axiosInstance";
 import { handleApiError } from "@/lib/handleapiError";
+import { toast } from "sonner"; 
 
 export const updateUsername = async ({ username, current_password }) => {
   try {
@@ -49,6 +50,43 @@ export const updateProfilePicture = async (formData) => {
     return res.data;
   } catch (err) {
     handleApiError(err, "Could not update your profile picture");
+    throw err;
+  }
+};
+
+
+export const registerAndLoginUser = async ({ email, username, password }) => {
+  try {
+    await axiosInstance.post("/api/users/register/", {
+      email,
+      username,
+      password,
+    });
+
+    await axiosInstance.post("/api/token/", {
+      email,
+      password,
+    });
+
+  } catch (err) {
+    toast.error("Registration or login failed");
+    throw err;
+  }
+};
+
+export const loginUser = async ({ email, password }) => {
+  try {
+    const response = await axiosInstance.post(
+      "/api/users/login/",
+      { email, password },
+      { withCredentials: true }
+    );
+
+    localStorage.setItem("user", JSON.stringify(response.data.user));
+
+    return response.data;
+  } catch (err) {
+    toast.error("Login failed. Please try again!");
     throw err;
   }
 };

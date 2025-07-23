@@ -41,7 +41,9 @@ export const updateTask = async (
   newTitle,
   newDueDate,
   newPriority,
-  isCompleted
+  isCompleted,
+  newDescription,
+  newDueTime
 ) => {
   const formattedDueDate = newDueDate
     ? new Date(newDueDate).toLocaleDateString("en-CA")
@@ -49,10 +51,33 @@ export const updateTask = async (
 
   const updatePayload = {};
 
-  if (newTitle !== undefined) updatePayload.title = newTitle;
-  if (newDueDate !== undefined) updatePayload.due_date = formattedDueDate;
-  if (newPriority !== undefined) updatePayload.priority = newPriority;
-  if (isCompleted !== undefined) updatePayload.is_completed = isCompleted;
+  if (newTitle !== undefined) {
+    updatePayload.title = newTitle;
+  }
+
+ 
+  if (newDueDate !== undefined) {
+    updatePayload.due_date = formattedDueDate;
+  }
+
+  if (newPriority !== undefined) {
+    const cleanedPriority = newPriority.trim().toLowerCase();
+    updatePayload.priority =
+      cleanedPriority.charAt(0).toUpperCase() + cleanedPriority.slice(1);
+  }
+
+  if (isCompleted !== undefined) {
+    updatePayload.is_completed = isCompleted;
+  }
+
+  if (newDescription !== undefined) {
+    const cleaned = newDescription.trim();
+    updatePayload.description = cleaned === "" ? null : cleaned;
+  }
+
+  if (newDueTime !== undefined) {
+    updatePayload.due_time = newDueTime;
+  }
 
   try {
     const response = await axiosInstance.put(
@@ -64,6 +89,8 @@ export const updateTask = async (
     return { success: false, error };
   }
 };
+
+
 export const updateTaskStatus = async (id, isCompleted) => {
   try {
     const response = await axiosInstance.patch(`/api/tasks/${id}/`, {

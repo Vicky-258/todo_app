@@ -1,10 +1,10 @@
 "use client";
 import { useDarkMode } from "@/lib/Hooks/useDarkMode";
 import React, { useState } from "react";
-import axios from "axios";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { loginUser } from "@/services/userService";
 
 export default function loginPage() {
   const router = useRouter();
@@ -18,41 +18,32 @@ export default function loginPage() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
 
-    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    if (!form.email || !emailPattern.test(form.email)) {
-      toast.error("🚫 Please enter a valid email address!");
-      return;
-    }
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    if (!form.password || form.password.length < 6) {
-      toast.error("🚫 Password must be at least 6 characters!");
-      return;
-    }
+  const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  if (!form.email || !emailPattern.test(form.email)) {
+    toast.error("🚫 Please enter a valid email address!");
+    return;
+  }
 
-    try {
+  if (!form.password || form.password.length < 6) {
+    toast.error("🚫 Password must be at least 6 characters!");
+    return;
+  }
 
-      const response = await axios.post(
-        "http://127.0.0.1:8000/api/users/login/",
-        form,
-        { withCredentials: true }
-      );
+  try {
+    await loginUser(form); 
+    setForm({ email: "", password: "" });
+    router.push("/");
+  } catch (error) {
+    const errorMsg =
+      error.response?.data?.message || "Error Occurred. Try again!";
+    toast.error(`🚫 ${errorMsg}`);
+  }
+};
 
-      localStorage.setItem("user", JSON.stringify(response.data.user));
-
-      // Clear the form after successful registration
-      setForm({ email: "", password: "" });
-
-      // Redirect to login or dashboard page
-      router.push("/"); // Adjust this to your desired path
-    } catch (error) {
-      const errorMsg =
-        error.response?.data?.message || "Error Occured. Try again!";
-      toast.error(`🚫 ${errorMsg}`);
-    }
-  };
 
   return (
     <div className="bg-card dark:bg-cardDark p-8 rounded-2xl shadow-md w-full max-w-sm items-center">

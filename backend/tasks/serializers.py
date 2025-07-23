@@ -31,7 +31,5 @@ class TaskSerializer(serializers.ModelSerializer):
         return data
 
     def update(self, instance, validated_data):
-        """Prevent updating the 'is_completed' field after it's True."""
-        if 'is_completed' in validated_data and instance.is_completed:
-            raise serializers.ValidationError("Cannot change 'is_completed' once it's set.")
         return super().update(instance, validated_data)
+
