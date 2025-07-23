@@ -18,12 +18,12 @@ const EmptyState = () => {
   ];
   const wildcards = [
     "A wise man once said... 'why one when you can have all' 🧠",
-    "Looks empty in here 👀Tap + to add your first quest.",
+    "Looks empty in here 👀Tap + to add a quest.",
     "All clear! Use this moment to reflect or plan ahead. 🧘‍♂️",
     "You've conquered the list like a boss 💼",
     "This must be what peace feels like ☁️",
     "Reward yourself with a cookie 🍪 You earned it.",
-    "Looks empty in here 👀Tap the + button to add your first task!",
+    "Looks empty in here 👀Tap the + button to add a task!",
     "No battles today, warrior. Rest up ⚔️",
     "Silence... too silent 👀 Start planning maybe?",
     "Greatness begins with an empty list 📜",
