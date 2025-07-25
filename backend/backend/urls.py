@@ -24,7 +24,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('tasks.urls')),
     path('api/users/', include('users.urls')),
-    path("healthz", health_check),
+    path("healthz/", health_check),
 ]
 
 # 👇 Add media only *after* urlpatterns is defined
