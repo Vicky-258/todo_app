@@ -6,13 +6,13 @@ import TopSection from "@/components/TopSection";
 import TaskGrid from "@/components/TaskGrid";
 import TaskModal from "@/components/TaskModal";
 import { FiPlus } from "react-icons/fi";
-import axios from "axios";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import ClientToaster from "@/components/ClientToaster";
 import { addTask, deleteTask, updateTask } from "@/services/taskService";
 import { refreshToken } from "@/lib/auth";
 import TaskModalDisplay from "@/components/TaskModalDisplay";
+import axiosInstance from "@/lib/axiosInstance";
 
 export default function Home() {
   const [tasks, setTasks] = useState([]);
@@ -34,30 +34,22 @@ export default function Home() {
 
   useEffect(() => {
     const fetchTasks = async () => {
-      try {
-        const url =
-          filterType === ""
-            ? "http://127.0.0.1:8000/api/tasks/"
-            : `http://127.0.0.1:8000/api/tasks/?filter=${filterType}`;
+      const url =
+        filterType === "" ? "/api/tasks/" : `/api/tasks/?filter=${filterType}`;
 
-        const response = await axios.get(url, {
-          withCredentials: true,
-        });
+      const tryFetch = async () => {
+        const response = await axiosInstance.get(url);
         setTasks(response.data);
+      };
+
+      try {
+        await tryFetch();
       } catch (error) {
         if (error.response?.status === 401) {
           const refreshed = await refreshToken();
           if (refreshed) {
             try {
-              const url =
-                filterType === ""
-                  ? "http://127.0.0.1:8000/api/tasks/"
-                  : `http://127.0.0.1:8000/api/tasks/?filter=${filterType}`;
-
-              const response = await axios.get(url, {
-                withCredentials: true,
-              });
-              setTasks(response.data);
+              await tryFetch();
             } catch (retryError) {
               console.error("Retry after refresh failed:", retryError);
               toast.error("❌ Still failed after refresh.");
@@ -74,7 +66,7 @@ export default function Home() {
     };
 
     fetchTasks();
-  }, [filterType]); // ← refetch when filter changes
+  }, [filterType]);
 
   async function handleAdd(title, dueDate, priority, description) {
     try {
