@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 from datetime import timedelta
 from decouple import config
+import dj_database_url
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -84,14 +85,7 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'todo_db',         # ← Use the name of the DB you created
-        'USER': 'postgres',        # ← Your PostgreSQL username
-        'PASSWORD': 'postgres258',# ← Your PostgreSQL password
-        'HOST': 'localhost',       # ← Default if local
-        'PORT': '5432',            # ← Default PostgreSQL port
-    }
+    "default": dj_database_url.config(default="sqlite:///db.sqlite3")
 }
 
 
