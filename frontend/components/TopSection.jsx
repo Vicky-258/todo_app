@@ -33,7 +33,7 @@ export default function TopSection({ isOpen, ToggleSideBar }) {
       />
 
       <h1 className="text-primary dark:text-primaryDark font-extrabold font-pro text-xl">
-        To-Do App
+        OBSYDE
       </h1>
 
       <ProfileButton

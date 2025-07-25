@@ -1,9 +1,12 @@
 import "./globals.css";
-import { ThemeProvider} from "@/lib/context/ThemeContext";
+import { ThemeProvider } from "@/lib/context/ThemeContext";
 
 export const metadata = {
-  title: "TO DO App",
-  description: "A Friendly TO DO App",
+  title: "OBSYDE",
+  description: "Your mind, Organized.",
+  icons: {
+    icon: "/favicon.ico", 
+  },
 };
 
 export default function RootLayout({ children }) {
