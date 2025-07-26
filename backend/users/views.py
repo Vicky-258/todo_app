@@ -37,7 +37,7 @@ class UserRegistrationView(APIView):
                 value=str(refresh.access_token),
                 httponly=True,
                 secure=True,         # Use only over HTTPS in prod
-                samesite='none',
+                samesite="None",
                 max_age=12 * 60 * 60
             )
             res.set_cookie(
@@ -45,7 +45,7 @@ class UserRegistrationView(APIView):
                 value=str(refresh),
                 httponly=True,
                 secure=True,
-                samesite='none',
+                samesite="None",
                 max_age=7 * 24 * 60 * 60
             )
 
@@ -68,7 +68,7 @@ class CustomTokenObtainPairView(TokenObtainPairView):
             value=access_token,
             httponly=True,
             secure=True,
-            samesite='none',
+            samesite='None',
             max_age=12 * 60 * 60
         )
         response.set_cookie(
@@ -76,7 +76,7 @@ class CustomTokenObtainPairView(TokenObtainPairView):
             value=refresh_token,
             httponly=True,
             secure=True,
-            samesite='none',
+            samesite='None',
             max_age=7 * 24 * 60 * 60
         )
 

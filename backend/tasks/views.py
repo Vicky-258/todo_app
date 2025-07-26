@@ -76,7 +76,7 @@ class CustomTokenRefreshView(TokenRefreshView):
                 value=str(access_token),
                 httponly=True,
                 secure=True,
-                samesite='none',
+                samesite='None',
                 max_age=12 * 60 * 60
             )
 
@@ -85,7 +85,7 @@ class CustomTokenRefreshView(TokenRefreshView):
                 value=str(new_refresh_token),
                 httponly=True,
                 secure=True,
-                samesite='none',
+                samesite='None',
                 max_age=7 * 24 * 60 * 60
             )
 
