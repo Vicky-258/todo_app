@@ -1,3 +1,6 @@
+import sys
+import traceback
+
 from django.http import JsonResponse
 from .serializers import CustomTokenObtainPairSerializer
 from rest_framework.response import Response
@@ -15,42 +18,54 @@ from .serializers import (UserRegistrationSerializer, UserProfileSerializer,
 
 class UserRegistrationView(APIView):
     def post(self, request):
-        serializer = UserRegistrationSerializer(data=request.data)
-        if serializer.is_valid():
-            user = serializer.save()
+        try:
+            print("📩 Incoming registration payload:", request.data)
+            sys.stdout.flush()
 
-            # 🔐 Create tokens for the new user
-            refresh = RefreshToken.for_user(user)
+            serializer = UserRegistrationSerializer(data=request.data)
+            if serializer.is_valid():
+                user = serializer.save()
+                refresh = RefreshToken.for_user(user)
 
-            # 🍪 Prepare response
-            res = Response({
-                "user": {
-                    "id": user.id,
-                    "username": user.username,
-                    "email": user.email,
-                }
-            }, status=status.HTTP_201_CREATED)
+                res = Response({
+                    "user": {
+                        "id": user.id,
+                        "username": user.username,
+                        "email": user.email,
+                    }
+                }, status=status.HTTP_201_CREATED)
 
-            # 🍪 Set HttpOnly cookies
-            res.set_cookie(
-                key='accessToken',
-                value=str(refresh.access_token),
-                httponly=True,
-                secure=True,         # Use only over HTTPS in prod
-                samesite="None",
-                max_age=12 * 60 * 60
+                res.set_cookie(
+                    key='accessToken',
+                    value=str(refresh.access_token),
+                    httponly=True,
+                    secure=True,
+                    samesite="None",
+                    max_age=12 * 60 * 60
+                )
+                res.set_cookie(
+                    key='refreshToken',
+                    value=str(refresh),
+                    httponly=True,
+                    secure=True,
+                    samesite="None",
+                    max_age=7 * 24 * 60 * 60
+                )
+
+                return res
+
+            print("❌ Validation errors:", serializer.errors)
+            sys.stdout.flush()
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        except Exception as e:
+            print("🔥 SERVER ERROR on register:", str(e))
+            traceback.print_exc()
+            sys.stdout.flush()
+            return Response(
+                {"error": str(e)},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
-            res.set_cookie(
-                key='refreshToken',
-                value=str(refresh),
-                httponly=True,
-                secure=True,
-                samesite="None",
-                max_age=7 * 24 * 60 * 60
-            )
-
-            return res
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
