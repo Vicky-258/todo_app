@@ -25,9 +25,9 @@ urlpatterns = [
     path('api/', include('tasks.urls')),
     path('api/users/', include('users.urls')),
     path("healthz/", health_check),
+    path("healthz", health_check),
 ]
 
-# 👇 Add media only *after* urlpatterns is defined
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
