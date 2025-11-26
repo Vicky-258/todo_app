@@ -42,3 +42,10 @@ backend/.env
 backend/.venv/
 backend/**/migrations/
 backend/.idea
+backend/media/
+
+Parser/
+
+faster-backend/
+
+scratch/
