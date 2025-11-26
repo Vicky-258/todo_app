@@ -11,13 +11,13 @@ export default function TaskGrid({
   modelOpen = false,
 }) {
   return (
-    <div className="px-4 sm:px-6 lg:px-8">
+    <div className="w-full h-full">
       {tasks.length === 0 ? (
-        <div className="flex justify-center items-center w-full h-[calc(100vh-10rem)]">
+        <div className="flex justify-center items-center w-full min-h-[400px]">
           <EmptyState />
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-8 gap-y-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 w-full auto-rows-fr pb-20">
           {tasks.map((task) => (
             <TaskItemCard
               key={task.id}

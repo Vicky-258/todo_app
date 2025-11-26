@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Sparkles } from "lucide-react";
 
 const EmptyState = () => {
   const morningQuotes = [
@@ -18,14 +19,13 @@ const EmptyState = () => {
   ];
   const wildcards = [
     "A wise man once said... 'why one when you can have all' 🧠",
-    "Looks empty in here 👀Tap + to add a quest.",
+    "Looks empty in here. Tap + to add a quest.",
     "All clear! Use this moment to reflect or plan ahead. 🧘‍♂️",
     "You've conquered the list like a boss 💼",
     "This must be what peace feels like ☁️",
     "Reward yourself with a cookie 🍪 You earned it.",
-    "Looks empty in here 👀Tap the + button to add a task!",
     "No battles today, warrior. Rest up ⚔️",
-    "Silence... too silent 👀 Start planning maybe?",
+    "Silence... too silent. Start planning maybe?",
     "Greatness begins with an empty list 📜",
   ];
 
@@ -55,15 +55,20 @@ const EmptyState = () => {
   };
 
   return (
-    <div className="flex flex-col items-center h-full p-28">
-      <p className="w-fit text-2xl text-TextC dark:text-TextCDark max-w-md">
+    <div className="flex flex-col items-center justify-center h-full p-8 text-center animate-in fade-in zoom-in duration-500">
+      <div className="w-16 h-16 mb-6 rounded-2xl bg-bground dark:bg-bgroundDark border border-borderC dark:border-borderCDark 
+        flex items-center justify-center text-primary dark:text-primaryDark shadow-sm">
+        <Sparkles size={32} strokeWidth={1.5} />
+      </div>
+      <p className="text-lg font-medium text-TextC dark:text-TextCDark max-w-md leading-relaxed">
         {message}
       </p>
       <button
         onClick={refreshMessage}
-        className="px-4 py-2 text-TextC dark:text-TextCDark rounded-xl"
+        className="mt-6 px-5 py-2 text-sm font-medium text-TextMuted hover:text-primary dark:hover:text-primaryDark 
+        transition-colors duration-200"
       >
-        Inspire Me ✨
+        Inspire Me
       </button>
     </div>
   );

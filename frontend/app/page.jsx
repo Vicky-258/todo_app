@@ -29,7 +29,6 @@ export default function Home() {
 
   function HandlesidebarOpen() {
     setisSideBarOpen(!isSideBarOpen);
-    console.log("Sidebar toggled. Is open?", isSideBarOpen);
   }
 
   useEffect(() => {
@@ -127,78 +126,89 @@ export default function Home() {
   };
 
   return (
-    <div className="flex bg-bground dark:bg-bgroundDark min-h-screen transition duration-500 ease-in-out">
+    <div className="flex min-h-screen w-full bg-bground dark:bg-bgroundDark text-TextC dark:text-TextCDark font-pro selection:bg-primarySoft selection:text-primaryDark">
       <ClientToaster />
-      <TopSection isOpen={isSideBarOpen} ToggleSideBar={HandlesidebarOpen} />
-      <div className="flex flex-1 pt-24 flex-col w-full items-center gap-24 px-4">
-        <div className="flex flex-row justify-between md:space-x-96 space-x-28">
-          <h1
-            className="text-4xl md:text-7xl font-bold text-TextC dark:text-TextCDark drop-shadow-md shadow-FloatingShadow
-          dark:shadow-FloatingShadowDark"
-          >
-            Tasks
-          </h1>
-          <div className="relative group w-fit">
-            <button
-              className="bg-primary dark:bg-primaryDark w-12 h-12 md:w-16 md:h-16 flex items-center justify-center rounded-full"
-              onClick={() => setAddOpen(true)}
-            >
-              <FiPlus size={24} className="text-TextCDark" />
-            </button>
-
-            <span className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 scale-0 group-hover:scale-100 transition-transform bg-gray-800 text-white text-xs px-2 py-1 rounded shadow-md whitespace-nowrap z-10">
-              Add Task
-            </span>
-          </div>
-        </div>
-        <TaskModal
-          isOpen={addopen || isModalOpen}
-          onClose={() => {
-            setAddOpen(false);
-            setIsModalOpen(false);
-            setIsEditMode(false);
-            setTaskToEdit(null);
-          }}
-          onSubmit={(...args) => {
-            if (isEditMode) {
-              handleUpdate(...args);
-            } else {
-              handleAdd(...args);
-            }
-          }}
-          taskToEdit={taskToEdit}
-          setTaskToEdit={setTaskToEdit}
-          isEditMode={isEditMode}
-        />
-
-        <TaskModalDisplay
-          isOpen={displayopen}
-          onClose={() => setDisplayOpen(false)}
-          task={selectedTask}
-          onEditClick={(task) => {
-            setTaskToEdit(task);
-            setIsEditMode(true);
-            setIsModalOpen(true);
-          }}
-        />
-
-        <TaskGrid
-          tasks={tasks}
-          deleteTask={handleDelete}
-          updateTask={handleUpdate}
-          onCardClick={(task) => {
-            setSelectedTask(task);
-            setDisplayOpen(true);
-          }}
-          modelOpen={displayopen}
-        />
-      </div>
 
       <SideBar
         isOpen={isSideBarOpen}
         setIsOpen={setisSideBarOpen}
         setFilterType={setFilterType}
       />
+
+      <div className="flex-1 flex flex-col min-w-0 transition-all duration-300 ease-in-out">
+        <TopSection isOpen={isSideBarOpen} ToggleSideBar={HandlesidebarOpen} />
+
+        <main className="flex-1 w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col gap-8">
+          {/* Header Section */}
+          <div className="flex flex-row justify-between items-end border-b border-borderC dark:border-borderCDark pb-6">
+            <div className="flex flex-col gap-1.5">
+              <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-TextC dark:text-TextCDark">
+                Tasks
+              </h1>
+              <p className="text-sm text-TextMuted font-medium">
+                Manage your daily goals and projects
+              </p>
+            </div>
+
+            <button
+              className="group relative flex items-center justify-center w-10 h-10 md:w-11 md:h-11 rounded-xl 
+              bg-primary dark:bg-primaryDark text-white shadow-lg shadow-primary/20 
+              hover:shadow-primary/40 hover:scale-105 active:scale-95 transition-all duration-200"
+              onClick={() => setAddOpen(true)}
+              aria-label="Add new task"
+            >
+              <FiPlus size={22} />
+              <span className="absolute -bottom-10 left-1/2 -translate-x-1/2 scale-0 group-hover:scale-100 
+                transition-transform bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 text-[10px] font-bold 
+                px-2 py-1 rounded shadow-md whitespace-nowrap z-10 pointer-events-none">
+                ADD TASK
+              </span>
+            </button>
+          </div>
+
+          <TaskModal
+            isOpen={addopen || isModalOpen}
+            onClose={() => {
+              setAddOpen(false);
+              setIsModalOpen(false);
+              setIsEditMode(false);
+              setTaskToEdit(null);
+            }}
+            onSubmit={(...args) => {
+              if (isEditMode) {
+                handleUpdate(...args);
+              } else {
+                handleAdd(...args);
+              }
+            }}
+            taskToEdit={taskToEdit}
+            setTaskToEdit={setTaskToEdit}
+            isEditMode={isEditMode}
+          />
+
+          <TaskModalDisplay
+            isOpen={displayopen}
+            onClose={() => setDisplayOpen(false)}
+            task={selectedTask}
+            onEditClick={(task) => {
+              setTaskToEdit(task);
+              setIsEditMode(true);
+              setIsModalOpen(true);
+            }}
+          />
+
+          <TaskGrid
+            tasks={tasks}
+            deleteTask={handleDelete}
+            updateTask={handleUpdate}
+            onCardClick={(task) => {
+              setSelectedTask(task);
+              setDisplayOpen(true);
+            }}
+            modelOpen={displayopen}
+          />
+        </main>
+      </div>
     </div>
   );
 }

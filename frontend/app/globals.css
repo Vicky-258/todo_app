@@ -1,131 +1,152 @@
 @import "tailwindcss";
 @custom-variant dark (&:where(.dark, .dark *));
 
-
 :root {
-  transition: background-color 0.4s ease-in-out, color 0.4s ease-in-out;
+  /* 
+    PREMIUM DARK THEME (Linear/Vercel inspired)
+    Using OKLCH for perceptual uniformity.
+  */
+
+  /* Base Backgrounds - Deep, rich, void-like */
+  --color-bground: oklch(98% 0.002 240);
+  /* Clean white for light mode */
+  --color-bgroundDark: oklch(12% 0.01 260);
+  /* Deep void for dark mode */
+
+  /* Surface / Cards - Subtle elevation */
+  --color-card: oklch(100% 0 0);
+  --color-cardDark: oklch(16% 0.012 260);
+  /* Slightly lighter than bg */
+
+  /* Text Colors - High contrast hierarchy */
+  --color-TextC: oklch(20% 0.02 260);
+  --color-TextCDark: oklch(92% 0.004 260);
+  /* Soft white */
+  --color-TextMuted: oklch(55% 0.02 260);
+  /* Secondary text */
+
+  /* Borders - Subtle separation */
+  --color-borderC: oklch(92% 0.005 260);
+  --color-borderCDark: oklch(25% 0.02 260);
+  /* Subtle dark border */
+
+  /* Primary Brand - Sophisticated Indigo/Violet */
+  --color-primary: oklch(62% 0.18 265);
+  --color-primaryDark: oklch(68% 0.16 265);
+  --color-primarySoft: oklch(62% 0.18 265 / 15%);
+  /* For backgrounds/hovers */
+
+  /* Accents */
+  --color-accent: oklch(70% 0.14 180);
+  /* Teal-ish */
+  --color-accentDark: oklch(75% 0.12 180);
+
+  /* Functional Colors */
+  --color-redC: oklch(60% 0.18 25);
+  --color-redCDark: oklch(65% 0.16 25);
+  --color-greenC: oklch(65% 0.15 140);
+  --color-orangeC: oklch(70% 0.15 50);
+
+  /* Shadows & Depth */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-glow: 0 0 20px -5px var(--color-primaryDark);
+
+  /* Fonts */
+  --font-pro: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
-.rdp-day_disabled {
-  color: #9ca3af !important;
-  /* Tailwind's gray-400 */
-  opacity: 0.5 !important;
-  cursor: not-allowed !important;
-  text-decoration: line-through;
-  pointer-events: none;
+@theme {
+  --color-bground: var(--color-bground);
+  --color-bgroundDark: var(--color-bgroundDark);
+
+  --color-card: var(--color-card);
+  --color-cardDark: var(--color-cardDark);
+
+  --color-TextC: var(--color-TextC);
+  --color-TextCDark: var(--color-TextCDark);
+  --color-TextMuted: var(--color-TextMuted);
+
+  --color-borderC: var(--color-borderC);
+  --color-borderCDark: var(--color-borderCDark);
+
+  --color-primary: var(--color-primary);
+  --color-primaryDark: var(--color-primaryDark);
+  --color-primarySoft: var(--color-primarySoft);
+
+  --color-accent: var(--color-accent);
+  --color-accentDark: var(--color-accentDark);
+
+  --color-redC: var(--color-redC);
+  --color-redCDark: var(--color-redCDark);
+  --color-greenC: var(--color-greenC);
+  --color-orangeC: var(--color-orangeC);
+
+  --font-pro: var(--font-pro);
+
+  --shadow-glow: var(--shadow-glow);
 }
 
-/* Align weekday labels in the calendar */
-.rdp-head {
-  display: grid !important;
-  grid-template-columns: repeat(7, 1fr) !important;
-  text-align: center;
+/* Global Reset & Base Styles */
+body {
+  background-color: var(--color-bgroundDark);
+  color: var(--color-TextCDark);
+  font-family: var(--font-pro);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Align the week rows too */
-.rdp-row {
-  display: grid !important;
-  grid-template-columns: repeat(7, 1fr) !important;
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
 }
 
-@theme{
-
-  --font-pro: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  --font-cool: 'Poppins', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-
-  /* Primary */
-  --color-primary: oklch(0.6 0.2177 257.42);
-  --color-primaryDark: oklch(0.62 0.205577 255.4861);
-  /*accent */
-  --color-accent: oklch(0.65 0.12 257);
-  --color-accentDark: oklch(0.55 0.13 255);
-  /*Background */
-  --color-bground: oklch(0.97 0 0);
-  --color-bgroundDark: oklch(0.24 0 0);
-  /*Card */
-  --color-card: oklch(1 0 0);
-  --color-cardDark: oklch(0.29 0.0036 286.18);
-  /* Text */
-  --color-TextC: oklch(0.32 0 0);
-  --color-TextCDark: oklch(0.94 0 0);
-  /* Border */
-  --color-borderC: oklch(0.86 0.0068 286.26);
-  --color-borderCDark: oklch(0.35 0.0034 286.22);
-
-  --color-redC: oklch(0.65 0.2321 28.66);
-  --color-redCDark: oklch(0.66 0.2236 28.29);
-
-  --color-CardShadows: oklch(0 0 0 / 10%);
-  --color-CardShadowsDark: oklch(0 0 0 / 60%);
-
-  --color-ButtonShadow: oklch(0 0 0 / 15%);
-  --color-ButtonShadowDark: oklch(1 0 0 / 10%);
-
-  --color-NavbarShadow: oklch(0 0 0 / 8%);
-  --color-NavbarShadowDark: oklch(1 0 0 / 5%);
-
-  --color-FloatingShadow: oklch(0 0 0 / 20%);
-  --color-FloatingShadowDark: oklch(0 0 0 / 80%);
+::-webkit-scrollbar-track {
+  background: transparent;
 }
 
+::-webkit-scrollbar-thumb {
+  background: var(--color-borderCDark);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-TextMuted);
+}
+
+/* Selection */
+::selection {
+  background: var(--color-primarySoft);
+  color: var(--color-primaryDark);
+}
+
+/* React Datepicker Overrides for Dark Theme */
 .react-datepicker {
-  background-color: var(--color-bgroundDark) !important;
-  color: var(--color-TextCDark) !important;
+  background-color: var(--color-cardDark) !important;
   border: 1px solid var(--color-borderCDark) !important;
-  border-radius: 0.75rem !important;
-  box-shadow: 0 4px 24px var(--color-CardShadowsDark) !important;
   font-family: var(--font-pro) !important;
+  box-shadow: var(--shadow-lg) !important;
 }
 
 .react-datepicker__header {
-  background-color: var(--color-bgroundDark) !important;
+  background-color: var(--color-cardDark) !important;
   border-bottom: 1px solid var(--color-borderCDark) !important;
-  color: var(--color-TextCDark) !important;
 }
 
-.react-datepicker__current-month {
-  color: var(--color-TextCDark) !important;
-  font-size: 1rem;
-  font-weight: 600;
-}
-
-.react-datepicker__day-name {
-  color: var(--color-borderCDark) !important;
-  font-weight: 500;
-}
-
+.react-datepicker__current-month,
+.react-datepicker__day-name,
 .react-datepicker__day {
   color: var(--color-TextCDark) !important;
-  border-radius: 9999px !important;
-  transition: background-color 0.2s ease;
 }
 
 .react-datepicker__day:hover {
+  background-color: var(--color-primarySoft) !important;
+  color: var(--color-primaryDark) !important;
+}
+
+.react-datepicker__day--selected {
   background-color: var(--color-primaryDark) !important;
   color: white !important;
-}
-
-.react-datepicker__day--selected,
-.react-datepicker__day--keyboard-selected {
-  background-color: var(--color-primary) !important;
-  color: white !important;
-}
-
-.react-datepicker__day--today {
-  border-bottom: 2px solid var(--color-accent) !important;
-  font-weight: bold;
-}
-
-.react-datepicker__navigation {
-  top: 10px !important;
-}
-
-.react-datepicker__navigation-icon::before {
-  border-color: var(--color-TextCDark) !important;
-}
-
-.react-datepicker__today-button {
-  background-color: var(--color-cardDark) !important;
-  color: var(--color-TextCDark) !important;
-  border-top: 1px solid var(--color-borderCDark) !important;
 }
