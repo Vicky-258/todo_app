@@ -7,13 +7,21 @@ export function middleware(request) {
   const isAuthPage =
     pathname.startsWith("/auth/login") || pathname.startsWith("/auth/register");
 
+  const isLandingPage = pathname === "/";
+
+  // Redirect authenticated users to dashboard
+  if (token && (isAuthPage || isLandingPage)) {
+    return NextResponse.redirect(new URL("/dashboard", request.url));
+  }
+
   const isPublic = [
     "/_next",
     "/favicon.ico",
     "/auth/login",
     "/auth/register",
     "/api/auth",
-  ].some((path) => pathname.startsWith(path));
+    "/" // Landing page is public
+  ].some((path) => pathname.startsWith(path) || pathname === "/");
 
   if (isPublic) {
     return NextResponse.next();

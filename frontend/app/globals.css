@@ -1,152 +1,195 @@
 @import "tailwindcss";
+
+/* @plugin "tailwindcss-animate"; */
+
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  /* 
-    PREMIUM DARK THEME (Linear/Vercel inspired)
-    Using OKLCH for perceptual uniformity.
-  */
+  /* Light Mode - Soft Cloudy / Premium Glass */
+  --background: 210 40% 98%;
+  /* Soft White/Blueish */
+  --foreground: 222 47% 11%;
+  /* Deep Navy Text */
 
-  /* Base Backgrounds - Deep, rich, void-like */
-  --color-bground: oklch(98% 0.002 240);
-  /* Clean white for light mode */
-  --color-bgroundDark: oklch(12% 0.01 260);
-  /* Deep void for dark mode */
+  --card: 0 0% 100%;
+  --card-foreground: 222 47% 11%;
 
-  /* Surface / Cards - Subtle elevation */
-  --color-card: oklch(100% 0 0);
-  --color-cardDark: oklch(16% 0.012 260);
-  /* Slightly lighter than bg */
+  --popover: 0 0% 100%;
+  --popover-foreground: 222 47% 11%;
 
-  /* Text Colors - High contrast hierarchy */
-  --color-TextC: oklch(20% 0.02 260);
-  --color-TextCDark: oklch(92% 0.004 260);
-  /* Soft white */
-  --color-TextMuted: oklch(55% 0.02 260);
-  /* Secondary text */
+  --primary: 221 100% 58%;
+  /* Electric Blue */
+  --primary-foreground: 210 40% 98%;
 
-  /* Borders - Subtle separation */
-  --color-borderC: oklch(92% 0.005 260);
-  --color-borderCDark: oklch(25% 0.02 260);
-  /* Subtle dark border */
+  --secondary: 210 40% 96.1%;
+  --secondary-foreground: 222 47% 11.2%;
 
-  /* Primary Brand - Sophisticated Indigo/Violet */
-  --color-primary: oklch(62% 0.18 265);
-  --color-primaryDark: oklch(68% 0.16 265);
-  --color-primarySoft: oklch(62% 0.18 265 / 15%);
-  /* For backgrounds/hovers */
+  --muted: 210 40% 96.1%;
+  --muted-foreground: 215.4 16.3% 46.9%;
 
-  /* Accents */
-  --color-accent: oklch(70% 0.14 180);
-  /* Teal-ish */
-  --color-accentDark: oklch(75% 0.12 180);
+  --accent: 210 40% 96.1%;
+  --accent-foreground: 222 47% 11.2%;
 
-  /* Functional Colors */
-  --color-redC: oklch(60% 0.18 25);
-  --color-redCDark: oklch(65% 0.16 25);
-  --color-greenC: oklch(65% 0.15 140);
-  --color-orangeC: oklch(70% 0.15 50);
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 210 40% 98%;
 
-  /* Shadows & Depth */
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-  --shadow-glow: 0 0 20px -5px var(--color-primaryDark);
+  --border: 214.3 31.8% 91.4%;
+  --input: 214.3 31.8% 91.4%;
+  --ring: 221 100% 58%;
 
-  /* Fonts */
-  --font-pro: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --radius: 0.75rem;
+}
+
+.dark {
+  /* Dark Mode - Deep Navy / Cyber Minimal */
+  --background: 222 47% 8%;
+  /* Deepest Navy */
+  --foreground: 210 40% 98%;
+
+  --card: 222 47% 10%;
+  /* Slightly lighter navy */
+  --card-foreground: 210 40% 98%;
+
+  --popover: 222 47% 10%;
+  --popover-foreground: 210 40% 98%;
+
+  --primary: 213 100% 64%;
+  /* Bright Electric Blue */
+  --primary-foreground: 222 47% 11%;
+
+  --secondary: 217.2 32.6% 17.5%;
+  --secondary-foreground: 210 40% 98%;
+
+  --muted: 217.2 32.6% 17.5%;
+  --muted-foreground: 215 20.2% 65.1%;
+
+  --accent: 217.2 32.6% 17.5%;
+  --accent-foreground: 210 40% 98%;
+
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 210 40% 98%;
+
+  --border: 217.2 32.6% 17.5%;
+  --input: 217.2 32.6% 17.5%;
+  --ring: 213 100% 64%;
 }
 
 @theme {
-  --color-bground: var(--color-bground);
-  --color-bgroundDark: var(--color-bgroundDark);
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
 
-  --color-card: var(--color-card);
-  --color-cardDark: var(--color-cardDark);
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
 
-  --color-TextC: var(--color-TextC);
-  --color-TextCDark: var(--color-TextCDark);
-  --color-TextMuted: var(--color-TextMuted);
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
 
-  --color-borderC: var(--color-borderC);
-  --color-borderCDark: var(--color-borderCDark);
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
 
-  --color-primary: var(--color-primary);
-  --color-primaryDark: var(--color-primaryDark);
-  --color-primarySoft: var(--color-primarySoft);
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
 
-  --color-accent: var(--color-accent);
-  --color-accentDark: var(--color-accentDark);
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
 
-  --color-redC: var(--color-redC);
-  --color-redCDark: var(--color-redCDark);
-  --color-greenC: var(--color-greenC);
-  --color-orangeC: var(--color-orangeC);
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
 
-  --font-pro: var(--font-pro);
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
 
-  --shadow-glow: var(--shadow-glow);
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-pulse-glow: pulse-glow 3s ease-in-out infinite;
+  --animate-shimmer: shimmer 1.5s infinite;
+
+  @keyframes accordion-down {
+    from {
+      height: 0;
+    }
+
+    to {
+      height: var(--radix-accordion-content-height);
+    }
+  }
+
+  @keyframes accordion-up {
+    from {
+      height: var(--radix-accordion-content-height);
+    }
+
+    to {
+      height: 0;
+    }
+  }
+
+  @keyframes float {
+
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  @keyframes pulse-glow {
+
+    0%,
+    100% {
+      opacity: 0.5;
+      transform: scale(1);
+    }
+
+    50% {
+      opacity: 1;
+      transform: scale(1.05);
+    }
+  }
+
+  @keyframes shimmer {
+    100% {
+      transform: translateX(100%);
+    }
+  }
 }
 
-/* Global Reset & Base Styles */
+/* Base Styles */
 body {
-  background-color: var(--color-bgroundDark);
-  color: var(--color-TextCDark);
-  font-family: var(--font-pro);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  @apply bg-background text-foreground antialiased;
+  font-feature-settings: "rlig" 1, "calt" 1;
 }
 
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+/* Neo-glass Utilities */
+.glass {
+  @apply bg-white/10 dark:bg-black/20 backdrop-blur-xl border border-white/20 dark:border-white/5 shadow-lg;
 }
 
-::-webkit-scrollbar-track {
-  background: transparent;
+.glass-card {
+  @apply bg-white/60 dark:bg-[#111827]/60 backdrop-blur-md border border-white/40 dark:border-white/5 shadow-xl transition-all duration-300;
 }
 
-::-webkit-scrollbar-thumb {
-  background: var(--color-borderCDark);
-  border-radius: 4px;
+.glass-input {
+  @apply bg-white/50 dark:bg-black/20 border-white/30 dark:border-white/10 focus:ring-primary/50 backdrop-blur-sm transition-all duration-300;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: var(--color-TextMuted);
+.glass-button {
+  @apply bg-primary/90 hover:bg-primary text-white shadow-lg shadow-primary/20 backdrop-blur-sm transition-all duration-300;
 }
 
-/* Selection */
-::selection {
-  background: var(--color-primarySoft);
-  color: var(--color-primaryDark);
-}
-
-/* React Datepicker Overrides for Dark Theme */
-.react-datepicker {
-  background-color: var(--color-cardDark) !important;
-  border: 1px solid var(--color-borderCDark) !important;
-  font-family: var(--font-pro) !important;
-  box-shadow: var(--shadow-lg) !important;
-}
-
-.react-datepicker__header {
-  background-color: var(--color-cardDark) !important;
-  border-bottom: 1px solid var(--color-borderCDark) !important;
-}
-
-.react-datepicker__current-month,
-.react-datepicker__day-name,
-.react-datepicker__day {
-  color: var(--color-TextCDark) !important;
-}
-
-.react-datepicker__day:hover {
-  background-color: var(--color-primarySoft) !important;
-  color: var(--color-primaryDark) !important;
-}
-
-.react-datepicker__day--selected {
-  background-color: var(--color-primaryDark) !important;
-  color: white !important;
+/* Chrome / 3D Effects */
+.chrome-text {
+  @apply bg-clip-text text-transparent bg-gradient-to-b from-white to-white/50;
 }
