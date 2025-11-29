@@ -6,6 +6,12 @@ import { Button } from "@/components/ui/button"
 import { ArrowRight, CheckCircle2, Zap, Shield, Layout, Sparkles } from "lucide-react"
 
 export default function LandingPage() {
+
+  useEffect(() => {
+    // Backend warm-up
+    fetch("https://<your-backend-url>/healthz").catch(() => { });
+  }, []);
+
   return (
     <div className="flex flex-col min-h-screen">
       {/* Hero Section */}
